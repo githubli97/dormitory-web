@@ -73,4 +73,5 @@
      "repairCount":"0",
      "sortNum":"5"
    }
- ]
+ ];
+  export {apartmentData}

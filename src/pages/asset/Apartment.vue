@@ -22,9 +22,10 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.name }}</td>
-        <td class="text-xs-center"><img v-if="!!props.item.image" width="102" height="36" :src="props.item.image"/></td>
-        <td class="text-xs-center">{{ props.item.letter }}</td>
+        <td class="text-xs-center">{{ props.item.apartmentName }}</td>
+        <td class="text-xs-center">{{ props.item.apartmentManager }}</td>
+        <td class="text-xs-center">{{ props.item.totalFloor }}</td>
+        <td class="text-xs-center">{{ props.item.apartmentType }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editApartment(props.item)">
             <i class="el-icon-edit"/>
@@ -60,7 +61,7 @@
         </v-toolbar>
         <v-card-text class="px-5 py-2">
           <!-- 表单 -->
-          <apartment-form :oldApartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
+          <apartment-form :oldapartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -121,25 +122,25 @@
     },
     methods: {
       addApartment() {
-        this.Apartment = {};
+        this.apartment = {};
         this.isEdit = false;
         this.show = true;
       },
       editApartment(item) {
-        this.Apartment = item;
+        this.apartment = item;
         this.isEdit = true;
         this.show = true;
-        // 查询商品分类信息，进行回显
-        this.$http.get("/item/category/bid/" + item.id)
-          .then(resp => {
-            this.Apartment.categories = resp.data;
-          })
+        // // 查询商品分类信息，进行回显
+        // this.$http.get("/item/category/bid/" + item.id)
+        //   .then(resp => {
+        //     this.apartment.categories = resp.data;
+        //   })
 
       },
       deleteApartment(item) {
         this.$message.confirm('此操作将永久删除该公寓, 是否继续?').then(() => {
           // 发起删除请求
-          this.$http.delete("/item/Apartment?id=" + item.id,)
+          this.$http.delete("/asset/apartment?id=" + item.id,)
             .then(() => {
               // 删除成功，重新加载数据
               this.$message.success("删除成功！");
@@ -154,9 +155,9 @@
         this.loading = true;
         // 200ms后返回假数据
         window.setTimeout(() => {
-          this.items = ApartmentData.slice(0,4);
-          this.totalItems = 100;
+          this.items = apartmentData;
           this.loading = false;
+
         }, 200)
       }
     }
