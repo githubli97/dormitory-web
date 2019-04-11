@@ -1,70 +1,70 @@
 <template>
-  <v-form v-model="valid" ref="apartmentForm">
+  <v-form v-model="valid" ref="roomForm">
     <v-text-field
       label="公寓名称"
-      v-model="apartment.apartmentName"
+      v-model="room.roomName"
       :rules="[v => !!v || '公寓名称不能为空']"
       :counter="10"
       required
     />
     <v-text-field
       label="公寓管理员"
-      v-model="apartment.apartmentManager"
+      v-model="room.roomManager"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="公寓总楼层"
-      v-model="apartment.totalFloor"
+      v-model="room.totalFloor"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="公寓总房间数"
-      v-model="apartment.totalRoom"
+      v-model="room.totalRoom"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="公寓类型"
-      v-model="apartment.apartmentType"
+      v-model="room.roomType"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="开始使用日期"
-      v-model="apartment.useDate"
+      v-model="room.useDate"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="学生性别"
-      v-model="apartment.studentSex"
+      v-model="room.studentSex"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="维修次数"
-      v-model="apartment.repairCount"
+      v-model="room.repairCount"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <v-text-field
       label="排序号"
-      v-model="apartment.sortNum"
+      v-model="room.sortNum"
       :rules="[v => v.length === 1 || '首字母只能是1位']"
       required
       mask="A"
     />
     <!--<v-cascader url="/item/category/list" required-->
-                <!--v-model="apartment.categories"-->
+                <!--v-model="room.categories"-->
                 <!--multiple label="商品分类"/>-->
     <!--<v-layout row>-->
       <!--<v-flex xs3>-->
@@ -72,7 +72,7 @@
       <!--</v-flex>-->
       <!--<v-flex>-->
         <!--<v-upload-->
-          <!--v-model="apartment.image" url="/item/upload" :multiple="false" :pic-width="250" :pic-height="90"-->
+          <!--v-model="room.image" url="/item/upload" :multiple="false" :pic-width="250" :pic-height="90"-->
         <!--/>-->
       <!--</v-flex>-->
     <!--</v-layout>-->
@@ -87,9 +87,9 @@
   import config from '@/config';
 
   export default {
-    name: "apartment-form",
+    name: "room-form",
     props: {
-      oldApartment: Object,
+      oldRoom: Object,
       isEdit: {
         type: Boolean,
         default: false
@@ -103,13 +103,13 @@
       return {
         baseUrl: config.api,
         valid: false,
-        apartment: {
+        room: {
           id: '',
-          apartmentName: '',
-          apartmentManager: '',
+          roomName: '',
+          roomManager: '',
           totalFloor: '',
           totalRoom: '',
-          apartmentType: '',
+          roomType: '',
           useDate: '',
           studentSex: '',
           imageA: '',
@@ -121,24 +121,24 @@
       }
     },
     watch: {
-      oldApartment: {
+      oldRoom: {
         deep: true,
         handler(val) {
-          Object.deepCopy(val, this.apartment);
+          Object.deepCopy(val, this.room);
         }
       }
     },
     methods: {
       submit() {
         // 表单校验
-        if (this.$refs.apartmentForm.validate()) {
-          this.apartment.categories = this.apartment.categories.map(c => c.id);
-          this.apartment.letter = this.apartment.letter.toUpperCase();
+        if (this.$refs.roomForm.validate()) {
+          this.room.categories = this.room.categories.map(c => c.id);
+          this.room.letter = this.room.letter.toUpperCase();
           // 将数据提交到后台
           this.$http({
             method: this.isEdit ? 'put' : 'post',
-            url: '/item/apartment',
-            data: this.$qs.stringify(this.apartment)
+            url: '/item/room',
+            data: this.$qs.stringify(this.room)
           }).then(() => {
             // 关闭窗口
             this.$message.success("保存成功！");
@@ -150,15 +150,15 @@
       },
       clear() {
         // 重置表单
-        this.$refs.apartmentForm.reset();
+        this.$refs.roomForm.reset();
         this.categories = [];
       },
       // 图片上传出成功后操作
       handleImageSuccess(res) {
-        this.apartment.image = res;
+        this.room.image = res;
       },
       removeImage() {
-        this.apartment.image = "";
+        this.room.image = "";
       },
       closeWindow() {
         this.$emit("close");

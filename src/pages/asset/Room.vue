@@ -1,11 +1,11 @@
 <template>
   <v-card>
     <v-card-title>
-      <v-btn @click="addApartment" color="primary">新增公寓</v-btn>
+      <v-btn @click="addRoom" color="primary">新增宿舍</v-btn>
       <v-spacer/>
       <v-text-field
         append-icon="search"
-        label="输入公寓名或管理员姓名"
+        label="输入宿舍名或管理员姓名"
         single-line
         hide-details
         v-model="search"
@@ -25,15 +25,15 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.apartmentName }}</td>
-        <td class="text-xs-center">{{ props.item.apartmentManager }}</td>
+        <td class="text-xs-center">{{ props.item.roomName }}</td>
+        <td class="text-xs-center">{{ props.item.roomManager }}</td>
         <td class="text-xs-center">{{ props.item.totalFloor }}</td>
-        <td class="text-xs-center">{{ props.item.apartmentType }}</td>
+        <td class="text-xs-center">{{ props.item.roomType }}</td>
         <td class="justify-center layout px-0">
-          <v-btn icon @click="editApartment(props.item)">
+          <v-btn icon @click="editRoom(props.item)">
             <i class="el-icon-edit"/>
           </v-btn>
-          <v-btn icon @click="deleteApartment(props.item)">
+          <v-btn icon @click="deleteRoom(props.item)">
             <i class="el-icon-delete"/>
           </v-btn>
         </td>
@@ -56,7 +56,7 @@
     <v-dialog v-model="show" max-width="600" scrollable v-if="show">
       <v-card>
         <v-toolbar dark dense color="primary">
-          <v-toolbar-title>{{isEdit ? '修改公寓' : '新增公寓'}}</v-toolbar-title>
+          <v-toolbar-title>{{isEdit ? '修改宿舍' : '新增宿舍'}}</v-toolbar-title>
           <v-spacer/>
           <v-btn icon @click="show = false">
             <v-icon>close</v-icon>
@@ -64,7 +64,7 @@
         </v-toolbar>
         <v-card-text class="px-5 py-2">
           <!-- 表单 -->
-          <apartment-form :oldapartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
+          <room-form :oldroom="room" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -73,12 +73,12 @@
 </template>
 
 <script>
-    import ApartmentForm from './ApartmentForm'
+    import RoomForm from './RoomForm'
 
     export default {
-      name: "apartment",
+      name: "room",
       components: {
-        ApartmentForm
+        RoomForm
       },
       data() {
         return {
@@ -91,14 +91,14 @@
           rowsPerPageText: '每页行数:',
           headers: [// 表头
             {text: 'id', align: 'center', value: 'id'},
-            {text: '公寓名', align: 'center', value: 'apartmentName'},
-            {text: '公寓管理员', align: 'center', value: 'apartmentManager'},
-            {text: '公寓总层数', align: 'center', value: 'totalFloor'},
-            {text: '公寓类型', align: 'center', value: 'apartmentType'},
+            {text: '宿舍名', align: 'center', value: 'roomName'},
+            {text: '宿舍管理员', align: 'center', value: 'roomManager'},
+            {text: '宿舍总层数', align: 'center', value: 'totalFloor'},
+            {text: '宿舍类型', align: 'center', value: 'roomType'},
             {text: '操作', align: 'center', value: 'id', sortable: false}
           ],
           show: false,// 是否弹出窗口
-          apartment: {}, // 公寓信息
+          room: {}, // 宿舍信息
           isEdit: false // 判断是编辑还是新增
         }
       },
@@ -121,26 +121,26 @@
         //console.log(this.pagination);
       },
       methods: {
-        addApartment() {
-          this.apartment = {};
+        addRoom() {
+          this.room = {};
           this.isEdit = false;
           this.show = true;
         },
-        editApartment(item) {
-          this.apartment = item;
+        editRoom(item) {
+          this.room = item;
           this.isEdit = true;
           this.show = true;
           // // 查询商品分类信息，进行回显
           // this.$http.get("/item/category/bid/" + item.id)
           //   .then(resp => {
-          //     this.apartment.categories = resp.data;
+          //     this.room.categories = resp.data;
           //   })
 
         },
-        deleteApartment(item) {
-          this.$message.confirm('此操作将永久删除该公寓, 是否继续?').then(() => {
+        deleteRoom(item) {
+          this.$message.confirm('此操作将永久删除该宿舍, 是否继续?').then(() => {
             // 发起删除请求
-            this.$http.delete("/asset/apartment?id=" + item.id,)
+            this.$http.delete("/asset/room?id=" + item.id,)
               .then(() => {
                 // 删除成功，重新加载数据
                 this.$message.success("删除成功！");
@@ -154,7 +154,7 @@
         getDataFromApi() {
           this.loading = true;
           // 通过axios获取数据
-          this.$http.get("/asset/apartment/page", {
+          this.$http.get("/asset/room/page", {
             params: {
               page: this.pagination.page, // 当前页
               rows: this.pagination.rowsPerPage, // 每页条数
@@ -164,7 +164,7 @@
             }
           }).then(resp => { // 获取响应结果对象
             this.totalItems = resp.data.total; // 总条数
-            this.items = resp.data.items; // 公寓数据
+            this.items = resp.data.items; // 宿舍数据
             this.loading = false; // 加载完成
           });
         }
