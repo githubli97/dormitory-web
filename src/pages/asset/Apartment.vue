@@ -64,7 +64,7 @@
         </v-toolbar>
         <v-card-text class="px-5 py-2">
           <!-- 表单 -->
-          <apartment-form :oldapartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
+          <apartment-form :oldApartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -140,7 +140,7 @@
         deleteApartment(item) {
           this.$message.confirm('此操作将永久删除该公寓, 是否继续?').then(() => {
             // 发起删除请求
-            this.$http.delete("/asset/apartment?id=" + item.id,)
+            this.$http.delete("/asset/apartment/" + item.id,)
               .then(() => {
                 // 删除成功，重新加载数据
                 this.$message.success("删除成功！");
