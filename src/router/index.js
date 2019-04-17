@@ -26,6 +26,9 @@ export default new Router({
         route("/asset/apartment",'/asset/Apartment',"Apartment"),
         route("/asset/room",'/asset/Room',"Room"),
 
+        route("/check/sanitation",'/check/Sanitation',"Sanitation"),
+        route("/check/sleep",'/check/Sleep',"Sleep"),
+
 
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/list",'/item/Goods',"Goods"),
