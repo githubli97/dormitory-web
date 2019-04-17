@@ -24,6 +24,9 @@ export default new Router({
       children:[
         route("/index/dashboard","/Dashboard","Dashboard"),
         route("/asset/apartment",'/asset/Apartment',"Apartment"),
+        route("/asset/room",'/asset/Room',"Room"),
+
+
         route("/item/brand",'/item/Brand',"Brand"),
         route("/item/list",'/item/Goods',"Goods"),
         route("/item/specification",'/item/Specification',"Specification"),

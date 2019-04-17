@@ -5,7 +5,7 @@
       <v-spacer/>
       <v-text-field
         append-icon="search"
-        label="输入宿舍名或管理员姓名"
+        label="输入宿舍号"
         single-line
         hide-details
         v-model="search"
@@ -24,11 +24,10 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.roomName }}</td>
-        <td class="text-xs-center">{{ props.item.roomManager }}</td>
-        <td class="text-xs-center">{{ props.item.totalFloor }}</td>
-        <td class="text-xs-center">{{ props.item.roomType }}</td>
+        <td class="text-xs-center">{{ props.item.apartmentId }}</td>
+        <td class="text-xs-center">{{ props.item.roomNum }}</td>
+        <td class="text-xs-center">{{ props.item.studentCount }}</td>
+        <td class="text-xs-center">{{ props.item.roomArea }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editRoom(props.item)">
             <i class="el-icon-edit"/>
@@ -53,7 +52,7 @@
       </template>
     </v-data-table>
 
-    <v-dialog v-model="show" max-width="600" scrollable v-if="show">
+    <v-dialog v-model="show" max-width="600" scrollable v-if="show" persistent>
       <v-card>
         <v-toolbar dark dense color="primary">
           <v-toolbar-title>{{isEdit ? '修改宿舍' : '新增宿舍'}}</v-toolbar-title>
@@ -64,7 +63,7 @@
         </v-toolbar>
         <v-card-text class="px-5 py-2">
           <!-- 表单 -->
-          <room-form :oldroom="room" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
+          <room-form :oldRoom="oldRoom" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -73,104 +72,93 @@
 </template>
 
 <script>
-    import RoomForm from './RoomForm'
+  import RoomForm from './RoomForm'
 
-    export default {
-      name: "room",
-      components: {
-        RoomForm
-      },
-      data() {
-        return {
-          search: '',// 过滤字段
-          totalItems: 0,// 总条数
-          items: [],// 表格数据
-          loading: true,
-          pagination: {},// 分页信息
-          rowsPerPageItems: [5, 10, 30],
-          rowsPerPageText: '每页行数:',
-          headers: [// 表头
-            {text: 'id', align: 'center', value: 'id'},
-            {text: '宿舍名', align: 'center', value: 'roomName'},
-            {text: '宿舍管理员', align: 'center', value: 'roomManager'},
-            {text: '宿舍总层数', align: 'center', value: 'totalFloor'},
-            {text: '宿舍类型', align: 'center', value: 'roomType'},
-            {text: '操作', align: 'center', value: 'id', sortable: false}
-          ],
-          show: false,// 是否弹出窗口
-          room: {}, // 宿舍信息
-          isEdit: false // 判断是编辑还是新增
-        }
-      },
-      watch: {
-        pagination: {
-          handler() {
-            this.getDataFromApi();
-          },
-          deep: true
+  export default {
+    name: "room",
+    components: {
+      RoomForm
+    },
+    data() {
+      return {
+        search: '',// 过滤字段
+        totalItems: 0,// 总条数
+        items: [],// 表格数据
+        loading: true,
+        pagination: {},// 分页信息
+        rowsPerPageItems: [5, 10, 30],
+        rowsPerPageText: '每页行数:',
+        headers: [// 表头
+          {text: '所属公寓', align: 'center', value: 'apartmentId'},
+          {text: '房间号', align: 'center', value: 'roomNum'},
+          {text: '入住学生数', align: 'center', value: 'studentCount'},
+          {text: '房间面积', align: 'center', value: 'roomArea'},
+          {text: '操作', align: 'center', value: 'id', sortable: false}
+        ],
+        show: false,// 是否弹出窗口
+        oldRoom: {}, // 宿舍信息
+        isEdit: false // 判断是编辑还是新增
+      }
+    },
+    watch: {
+      pagination: {
+        handler() {
+          this.getDataFromApi();
         },
-        show(val, oldVal) {
-          // 表单关闭后重新加载数据
-          if (oldVal) {
-            this.getDataFromApi();
+        deep: true
+      },
+      show(val, oldVal) {
+        // 表单关闭后重新加载数据
+        if (oldVal) {
+          this.getDataFromApi();
+        }
+      }
+    },
+    methods: {
+      addRoom() {
+        this.oldRoom = null;
+        this.isEdit = false;
+        this.show = true;
+      },
+      editRoom(item) {
+        this.oldRoom = item;
+        this.isEdit = true;
+        this.show = true;
+      },
+      deleteRoom(item) {
+        this.$message.confirm('此操作将永久删除该宿舍, 是否继续?').then(() => {
+          // 发起删除请求
+          this.$http.delete("/asset/room/" + item.id,)
+            .then(() => {
+              // 删除成功，重新加载数据
+              this.$message.success("删除成功！");
+              this.getDataFromApi();
+            })
+        }).catch(() => {
+          this.$message.info("删除已取消！");
+        });
+
+      },
+      getDataFromApi() {
+        this.loading = true;
+        // 通过axios获取数据
+        this.$http.get("/asset/room/page", {
+          params: {
+            page: this.pagination.page, // 当前页
+            rows: this.pagination.rowsPerPage, // 每页条数
+            sortBy: this.pagination.sortBy, // 排序字段
+            desc: this.pagination.descending, // 是否降序
+            key: this.search // 查询字段
           }
-        }
-      },
-      mounted() {
-        //this.getDataFromApi();
-        //console.log(this.pagination);
-      },
-      methods: {
-        addRoom() {
-          this.room = {};
-          this.isEdit = false;
-          this.show = true;
-        },
-        editRoom(item) {
-          this.room = item;
-          this.isEdit = true;
-          this.show = true;
-          // // 查询商品分类信息，进行回显
-          // this.$http.get("/item/category/bid/" + item.id)
-          //   .then(resp => {
-          //     this.room.categories = resp.data;
-          //   })
-
-        },
-        deleteRoom(item) {
-          this.$message.confirm('此操作将永久删除该宿舍, 是否继续?').then(() => {
-            // 发起删除请求
-            this.$http.delete("/asset/room?id=" + item.id,)
-              .then(() => {
-                // 删除成功，重新加载数据
-                this.$message.success("删除成功！");
-                this.getDataFromApi();
-              })
-          }).catch(() => {
-            this.$message.info("删除已取消！");
-          });
-
-        },
-        getDataFromApi() {
-          this.loading = true;
-          // 通过axios获取数据
-          this.$http.get("/asset/room/page", {
-            params: {
-              page: this.pagination.page, // 当前页
-              rows: this.pagination.rowsPerPage, // 每页条数
-              sortBy: this.pagination.sortBy, // 排序字段
-              desc: this.pagination.descending, // 是否降序
-              key: this.search // 查询字段
-            }
-          }).then(resp => { // 获取响应结果对象
-            this.totalItems = resp.data.total; // 总条数
-            this.items = resp.data.items; // 宿舍数据
-            this.loading = false; // 加载完成
-          });
-        }
+        }).then(resp => { // 获取响应结果对象
+          this.totalItems = resp.data.total; // 总条数
+          this.items = resp.data.items; // 宿舍数据
+          this.loading = false; // 加载完成
+        });
+      }
     }
-    }
-  </script>
+  }
+</script>
 
 
 

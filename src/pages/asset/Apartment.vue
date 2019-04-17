@@ -24,7 +24,6 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.id }}</td>
         <td class="text-xs-center">{{ props.item.apartmentName }}</td>
         <td class="text-xs-center">{{ props.item.apartmentManager }}</td>
         <td class="text-xs-center">{{ props.item.totalFloor }}</td>
@@ -53,7 +52,7 @@
       </template>
     </v-data-table>
 
-    <v-dialog v-model="show" max-width="600" scrollable v-if="show">
+    <v-dialog v-model="show" max-width="600" scrollable v-if="show" persistent>
       <v-card>
         <v-toolbar dark dense color="primary">
           <v-toolbar-title>{{isEdit ? '修改公寓' : '新增公寓'}}</v-toolbar-title>
@@ -64,7 +63,7 @@
         </v-toolbar>
         <v-card-text class="px-5 py-2">
           <!-- 表单 -->
-          <apartment-form :oldApartment="apartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
+          <apartment-form :oldApartment="oldApartment" :isEdit="isEdit" @close="show = false" :reload="getDataFromApi"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -90,7 +89,6 @@
           rowsPerPageItems: [5, 10, 30],
           rowsPerPageText: '每页行数:',
           headers: [// 表头
-            {text: 'id', align: 'center', value: 'id'},
             {text: '公寓名', align: 'center', value: 'apartmentName'},
             {text: '公寓管理员', align: 'center', value: 'apartmentManager'},
             {text: '公寓总层数', align: 'center', value: 'totalFloor'},
@@ -98,7 +96,7 @@
             {text: '操作', align: 'center', value: 'id', sortable: false}
           ],
           show: false,// 是否弹出窗口
-          apartment: {}, // 公寓信息
+          oldApartment: {}, // 公寓信息
           isEdit: false // 判断是编辑还是新增
         }
       },
@@ -116,26 +114,16 @@
           }
         }
       },
-      mounted() {
-        //this.getDataFromApi();
-        //console.log(this.pagination);
-      },
       methods: {
         addApartment() {
-          this.apartment = {};
+          this.oldApartment = null;
           this.isEdit = false;
           this.show = true;
         },
         editApartment(item) {
-          this.apartment = item;
+          this.oldApartment = item;
           this.isEdit = true;
           this.show = true;
-          // // 查询商品分类信息，进行回显
-          // this.$http.get("/item/category/bid/" + item.id)
-          //   .then(resp => {
-          //     this.apartment.categories = resp.data;
-          //   })
-
         },
         deleteApartment(item) {
           this.$message.confirm('此操作将永久删除该公寓, 是否继续?').then(() => {
