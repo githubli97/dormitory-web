@@ -33,6 +33,9 @@
           <v-btn icon @click="editSanitation(props.item)">
             <i class="el-icon-edit"/>
           </v-btn>
+          <v-btn icon @click="selectSanitationRecord(props.item)">
+            <i class="el-icon-tickets" />
+          </v-btn>
           <v-btn icon @click="deleteSanitation(props.item)">
             <i class="el-icon-delete"/>
           </v-btn>
@@ -68,17 +71,35 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="show2" max-width="1000" scrollable v-if="show2" persistent>
+      <v-card>
+        <v-toolbar dark dense color="primary">
+          <v-toolbar-title>卫生打分</v-toolbar-title>
+          <v-spacer/>
+          <v-btn icon @click="show2 = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text class="px-5 py-2">
+          <!-- 表单 -->
+          <sanitation-record :sanitationId="sanitationId" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 
 </template>
 
 <script>
     import SanitationForm from './SanitationForm'
+    import SanitationRecord from './SanitationRecord'
 
     export default {
       name: "sanitation",
       components: {
-        SanitationForm
+        SanitationForm,
+        SanitationRecord
       },
       data() {
         return {
@@ -90,7 +111,7 @@
           rowsPerPageItems: [5, 10, 30],
           rowsPerPageText: '每页行数:',
           headers: [// 表头
-            {text: '单号', align: 'center', value: 'id'},
+            {text: '单号', align: 'center', sortable: false, value: 'id'},
             {text: '检查公寓', align: 'center', value: 'checkApartment'},
             {text: '检查楼层', align: 'center', value: 'checkFloor'},
             {text: '检查员', align: 'center', value: 'inspectorId'},
@@ -99,7 +120,10 @@
           ],
           show: false,// 是否弹出窗口
           oldSanitation: {}, // 卫生检查单信息
-          isEdit: false // 判断是编辑还是新增
+          isEdit: false, // 判断是编辑还是新增
+
+          show2: false,
+          sanitationId: ''
         }
       },
       watch: {
@@ -126,6 +150,10 @@
           this.oldSanitation = item;
           this.isEdit = true;
           this.show = true;
+        },
+        selectSanitationRecord(item) {
+          this.show2 = true;
+          this.sanitationId = item.id;
         },
         deleteSanitation(item) {
           this.$message.confirm('此操作将永久删除该卫生检查单, 是否继续?').then(() => {
