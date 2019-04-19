@@ -54,8 +54,15 @@ export default {
         this.dialog = true;
         return false;
       }
-      console.log(this.username + " ... " + this.password);
-      this.$router.push("/");
+      // 通过axios获取数据
+      this.$http.get("/user/query", {
+        params: {
+          username: this.username,
+          password: this.password
+        }
+      }).then(resp => { // 获取响应结果对象
+        this.$router.push("/");
+      });
     }
   }
 };

@@ -43,7 +43,7 @@
         </v-card>
       </template>
       <template slot="no-data">
-        <v-alert :value="true" color="error" icon="warning">
+        <v-alert :value="showNoData" color="error" icon="warning">
           对不起，没有查询到任何数据 :(
         </v-alert>
       </template>
@@ -97,7 +97,10 @@
         ],
         show: false,// 是否弹出窗口
         oldRoom: {}, // 宿舍信息
-        isEdit: false // 判断是编辑还是新增
+        isEdit: false, // 判断是编辑还是新增
+
+        showNoData: false
+
       }
     },
     watch: {
@@ -154,6 +157,8 @@
           this.totalItems = resp.data.total; // 总条数
           this.items = resp.data.items; // 宿舍数据
           this.loading = false; // 加载完成
+        }).catch(() =>{
+          this.showNoData = true;
         });
       }
     }

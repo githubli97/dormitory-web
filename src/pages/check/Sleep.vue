@@ -47,7 +47,7 @@
         </v-card>
       </template>
       <template slot="no-data">
-        <v-alert :value="true" color="error" icon="warning">
+        <v-alert :value="showNoData" color="error" icon="warning">
           对不起，没有查询到任何数据 :(
         </v-alert>
       </template>
@@ -123,7 +123,9 @@
           isEdit: false, // 判断是编辑还是新增
 
           show2: false,
-          sleepId: ''
+          sleepId: '',
+
+          showNoData: false
 
         }
       },
@@ -152,6 +154,27 @@
           this.isEdit = true;
           this.show = true;
         },
+        getDataFromApi() {
+          this.loading = true;
+          // 通过axios获取数据
+          this.$http.get("/check/sleep/page", {
+            params: {
+              page: this.pagination.page, // 当前页
+              rows: this.pagination.rowsPerPage, // 每页条数
+              sortBy: this.pagination.sortBy, // 排序字段
+              desc: this.pagination.descending, // 是否降序
+              key: this.search // 查询字段
+            }
+          }).then(resp => { // 获取响应结果对象
+            this.totalItems = resp.data.total; // 总条数
+            this.items = resp.data.items; // 考勤检查单数据
+            this.loading = false; // 加载完成
+
+          }).catch(() =>{
+            this.showNoData = true;
+            console.log(this.showNoData);
+          });
+        },
         deleteSleep(item) {
           this.$message.confirm('此操作将永久删除该考勤检查单, 是否继续?').then(() => {
             // 发起删除请求
@@ -169,23 +192,6 @@
         selectSleepRecord(item) {
           this.show2 = true;
           this.sleepId = item.id;
-        },
-        getDataFromApi() {
-          this.loading = true;
-          // 通过axios获取数据
-          this.$http.get("/check/sleep/page", {
-            params: {
-              page: this.pagination.page, // 当前页
-              rows: this.pagination.rowsPerPage, // 每页条数
-              sortBy: this.pagination.sortBy, // 排序字段
-              desc: this.pagination.descending, // 是否降序
-              key: this.search // 查询字段
-            }
-          }).then(resp => { // 获取响应结果对象
-            this.totalItems = resp.data.total; // 总条数
-            this.items = resp.data.items; // 考勤检查单数据
-            this.loading = false; // 加载完成
-          });
         }
     }
     }

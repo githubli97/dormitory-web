@@ -47,7 +47,7 @@
       </td>
     </template>
     <template slot="no-data">
-      <v-alert :value="true" color="error" icon="warning">
+      <v-alert :value="showNoData" color="error" icon="warning">
         对不起，没有查询到任何数据 :(
       </v-alert>
     </template>
@@ -77,7 +77,9 @@
           {text: '学生姓名', align: 'center', value: 'studentId'},
           {text: '是否正常考勤', align: 'center', value: 'isNormal'},
           {text: '备注', align: 'center', sortable: false, value: 'remark'}
-        ]
+        ],
+
+        showNoData: false
       }
     },
     watch: {
@@ -107,6 +109,9 @@
           this.totalItems = resp.data.total; // 总条数
           this.items = resp.data.items; // 卫生检查单数据
           this.loading = false; // 加载完成
+        }).catch(() =>{
+          this.showNoData = true;
+          console.log(this.showNoData);
         });
       },
       saveSanitationRecord(item) {

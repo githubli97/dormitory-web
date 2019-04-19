@@ -47,7 +47,7 @@
         </v-card>
       </template>
       <template slot="no-data">
-        <v-alert :value="true" color="error" icon="warning">
+        <v-alert :value="showNoData" color="error" icon="warning">
           对不起，没有查询到任何数据 :(
         </v-alert>
       </template>
@@ -123,7 +123,9 @@
           isEdit: false, // 判断是编辑还是新增
 
           show2: false,
-          sanitationId: ''
+          sanitationId: '',
+
+          showNoData: false
         }
       },
       watch: {
@@ -184,6 +186,9 @@
             this.totalItems = resp.data.total; // 总条数
             this.items = resp.data.items; // 卫生检查单数据
             this.loading = false; // 加载完成
+          }).catch(() =>{
+            this.showNoData = true;
+            console.log(this.showNoData);
           });
         }
     }
