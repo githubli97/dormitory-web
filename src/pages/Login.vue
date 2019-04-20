@@ -37,6 +37,11 @@
       用户名和密码不能为空
       </v-alert>
     </v-dialog>
+    <v-dialog v-model="dialog" width="300px">
+      <v-alert icon="warning" color="error" :value="true">
+        用户名和密码不能为空
+      </v-alert>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -55,13 +60,15 @@ export default {
         return false;
       }
       // 通过axios获取数据
-      this.$http.get("/user/query", {
-        params: {
+      this.$http.post("/auth/accredit",
+        this.$qs.stringify({
           username: this.username,
           password: this.password
-        }
-      }).then(resp => { // 获取响应结果对象
+        })
+      ).then(resp => { // 获取响应结果对象
         this.$router.push("/index/dashboard");
+      }).catch(resp => {
+        console.log(resp);
       });
     }
   }

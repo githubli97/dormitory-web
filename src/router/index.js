@@ -16,14 +16,11 @@ function route(path, file, name, children) {
 
 export default new Router({
   routes: [
-    {
-      path: "/login",
-      component: () => import('../pages/Login')
-    },
+    route("/login", '/Login', "Login"),
     {
       path: "/",
       component: () => import('../pages/Layout'),
-      redirect: "/index/dashboard",
+      redirect: "/login",
       children: [
         route("/index/dashboard", "/Dashboard", "Dashboard"),
         route("/asset/apartment", '/asset/Apartment', "Apartment"),
@@ -33,6 +30,5 @@ export default new Router({
         route("/check/sleep", '/check/Sleep', "Sleep")
       ]
     }
-    // route("/login",'/Login',"Login")
   ]
 })

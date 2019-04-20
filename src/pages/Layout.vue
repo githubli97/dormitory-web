@@ -17,7 +17,7 @@
               <img src="../assets/2.jpeg">
             </v-list-tile-avatar>
             <v-list-tile-content>
-              <v-list-tile-title>虎哥</v-list-tile-title>
+              <v-list-tile-title>{{ userInfo.username }}</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
         </v-list>
@@ -94,7 +94,11 @@
         drawer: true,// 左侧导航是否隐藏
         miniVariant: false,// 左侧导航是否收起
         title: '学生宿舍管理系统',// 顶部导航条名称,
-        menuMap:{}
+        menuMap: {},
+        userInfo: {
+          id: "",
+          username: ""
+        }
       }
     },
     computed: {
@@ -120,7 +124,13 @@
         m.items.forEach(i => {
           this.menuMap[p1][i.path.slice(1)] = i.title;
         })
-      })
+      });
+      this.$http.get("/auth/verify")
+        .then(resp => { // 获取响应结果对象
+          this.userInfo = Object.deepCopy(resp.data);
+        }).catch(() => {
+        this.$router.push("/login");
+      });
     }
   }
 </script>
