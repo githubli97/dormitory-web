@@ -112,7 +112,6 @@
           this.loading = false; // 加载完成
         }).catch(() =>{
           this.showNoData = true;
-          console.log(this.showNoData);
         });
       },
       saveSanitationRecord(item) {
