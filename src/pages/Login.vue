@@ -21,6 +21,21 @@
                     :append-icon-cb="() => (e1 = !e1)"
                     :type="e1 ? 'text' : 'password'"
                  ></v-text-field>
+                  <v-layout row>
+                    <v-flex xs8>
+                      <v-text-field
+                        prepend-icon="el-icon-edit"
+                        label="验证码"
+                        v-model="writeCode"
+                      ></v-text-field>
+                    </v-flex>
+                    <v-flex xs4>
+                      <div class="code" @click="refreshCode">
+                        <sidentify :identifyCode="identifyCode"></sidentify>
+                      </div>
+                    </v-flex>
+                  </v-layout>
+
                 </v-form>
               </v-card-text>
               <v-card-actions>
@@ -34,29 +49,39 @@
     </v-content>
     <v-dialog v-model="dialog" width="300px">
       <v-alert icon="warning" color="error" :value="true">
-      用户名和密码不能为空
-      </v-alert>
-    </v-dialog>
-    <v-dialog v-model="dialog" width="300px">
-      <v-alert icon="warning" color="error" :value="true">
-        用户名和密码不能为空
+        {{errorMsg}}
       </v-alert>
     </v-dialog>
   </v-app>
 </template>
 
 <script>
+  import sidentify from '../components/identify'
+
 export default {
   data: () => ({
     username: "",
     password: "",
     dialog: false,
-    e1:false
+    e1: false,
+    identifyCodes: "1234567890qwqertyuiopasdfghjjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
+    identifyCode: "",
+    writeCode: "",
+    errorMsg: ""
   }),
+  components: {
+    sidentify
+  },
   methods: {
     doLogin() {
       if (!this.username || !this.password) {
         this.dialog = true;
+        this.errorMsg = "用户名密码不能为空";
+        return false;
+      } else if (this.identifyCode.toUpperCase() != this.writeCode.toUpperCase()) {
+        this.dialog = true;
+        this.errorMsg = "验证码错误请重新输入";
+        this.refreshCode();
         return false;
       }
       // 通过axios获取数据
@@ -68,8 +93,25 @@ export default {
       ).then(resp => { // 获取响应结果对象
         this.$router.push("/index/dashboard");
       }).catch(resp => {
-        console.log(resp);
+        this.checkUserFlag = true;
       });
+    },
+    //随机数
+    randomNum(min, max) {
+      return Math.floor(Math.random() * (max - min) + min)
+    },
+    //说明随机数格式
+    refreshCode() {
+      this.identifyCode = ''
+      this.makeCode(this.identifyCodes, 4)
+    },
+    //生成随机数
+    makeCode(o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[
+          this.randomNum(0, this.identifyCodes.length)
+          ]
+      }
     }
   }
 };

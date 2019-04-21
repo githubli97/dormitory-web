@@ -10,18 +10,7 @@
       fixed
       app
     >
-      <v-toolbar flat class="transparent">
-        <v-list class="pa-0">
-          <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="../assets/2.jpeg">
-            </v-list-tile-avatar>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ userInfo.username }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-toolbar>
+      <userinfo :userinfo="userInfo"></userinfo>
       <v-divider/>
       <!-- 左侧菜单 -->
       <v-list class="pt-0" dense>
@@ -86,6 +75,7 @@
 
 <script>
   import menus from "../menu";
+  import Userinfo from "./user/Userinfo"
 
   export default {
     data() {
@@ -100,6 +90,9 @@
           username: ""
         }
       }
+    },
+    components: {
+      Userinfo
     },
     computed: {
       items() {

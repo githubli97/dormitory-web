@@ -17,10 +17,12 @@ function route(path, file, name, children) {
 export default new Router({
   routes: [
     route("/login", '/Login', "Login"),
+    route("/register", '/Register', "Register"),
+    route("/register-success", '/RegisterSuccess', "RegisterSuccess"),
     {
       path: "/",
       component: () => import('../pages/Layout'),
-      redirect: "/login",
+      redirect: "/index/dashboard",
       children: [
         route("/index/dashboard", "/Dashboard", "Dashboard"),
         route("/asset/apartment", '/asset/Apartment', "Apartment"),
