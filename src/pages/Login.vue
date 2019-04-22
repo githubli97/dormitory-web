@@ -10,23 +10,33 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
-                <v-form>
-                  <v-text-field prepend-icon="person" v-model="username" label="用户名" type="text"/>
+                <v-form ref="loginForm">
+                  <v-text-field
+                    prepend-icon="person"
+                    v-model="username"
+                    label="用户名"
+                    :error-messages="errorMsg4"
+                    v-on:blur="checkUsername"
+                    type="text"/>
                   <v-text-field
                     prepend-icon="lock"
                     v-model="password"
                     label="密码"
                     id="password"
+                    :rules="[rules.passwordRequired]"
                     :append-icon="e1 ? 'visibility' : 'visibility_off'"
                     :append-icon-cb="() => (e1 = !e1)"
                     :type="e1 ? 'text' : 'password'"
-                 ></v-text-field>
+                    :error-messages="errorMsg"
+                  ></v-text-field>
                   <v-layout row>
                     <v-flex xs8>
                       <v-text-field
                         prepend-icon="el-icon-edit"
                         label="验证码"
                         v-model="writeCode"
+                        v-on:blur="checkWriteCode"
+                        :error-messages="errorMsg2"
                       ></v-text-field>
                     </v-flex>
                     <v-flex xs4>
@@ -62,39 +72,65 @@ export default {
   data: () => ({
     username: "",
     password: "",
+
     dialog: false,
     e1: false,
-    identifyCodes: "1234567890qwqertyuiopasdfghjjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM",
+    identifyCodes: "123456789qwqertyuipasdfghjjklzxcvbnmQWERTYUIPASDFGHJKLZXCVBNM",
     identifyCode: "",
     writeCode: "",
-    errorMsg: ""
+    errorMsg2: [],
+    errorMsg4: [],
+    usernameError: true,
+    writeCodeError: true,
+    errorMsg: "",
+    rules: {
+      passwordRequired: v => !!v || '密码不能为空'
+    }
   }),
   components: {
     sidentify
   },
+  created() {
+    this.refreshCode();
+  },
   methods: {
     doLogin() {
-      if (!this.username || !this.password) {
-        this.dialog = true;
-        this.errorMsg = "用户名密码不能为空";
-        return false;
-      } else if (this.identifyCode.toUpperCase() != this.writeCode.toUpperCase()) {
-        this.dialog = true;
-        this.errorMsg = "验证码错误请重新输入";
-        this.refreshCode();
-        return false;
-      }
-      // 通过axios获取数据
-      this.$http.post("/auth/accredit",
-        this.$qs.stringify({
-          username: this.username,
-          password: this.password
+      this.checkWriteCode();
+      console.log(this.usernameError);
+      if (this.$refs.loginForm.validate() && !this.usernameError) {
+        this.$http({
+          method: 'post',
+          url: '/auth/accredit',
+          data: this.$qs.stringify({
+            username: this.username,
+            password: this.password
+          })
+        }).then(() => {
+          this.$router.push("/index/dashboard");
         })
-      ).then(resp => { // 获取响应结果对象
-        this.$router.push("/index/dashboard");
-      }).catch(resp => {
-        this.checkUserFlag = true;
-      });
+      }
+    },
+    checkUsername() {
+      if (this.username == null) {
+        this.errorMsg4 = ['用户名不能为空'];
+        this.usernameError = true;
+      } else {
+        this.errorMsg4 = [];
+        this.usernameError = false;
+      }
+    },
+    checkWriteCode() {
+      if (this.writeCode == null || this.writeCode == "") {
+        this.errorMsg2 = ['验证码不能为空'];
+        this.writeCodeError = true;
+      } else if (this.identifyCode.toUpperCase() != this.writeCode.toUpperCase()) {
+        this.errorMsg2 = ['验证码错误'];
+        this.writeCodeError = true;
+      } else {
+        this.errorMsg2 = [];
+        this.writeCodeError = false;
+      }
+      return true;
     },
     //随机数
     randomNum(min, max) {

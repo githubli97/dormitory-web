@@ -113,8 +113,6 @@
       errorMsg3: [],
       errorMsg4: [],
       rules: {
-        usernameRequired: v => !!v || '用户名不能为空',
-        usernameLength: v => (v.length >= 4 && v.length <= 16) || '用户名要在4~16位',
         passwordRequired: v => !!v || '密码不能为空',
         passwordLength: v => (v.length >= 4 && v.length <= 16) || '密码要在4~16位',
         phone: v => {

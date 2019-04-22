@@ -80,6 +80,28 @@
         />
       </v-flex>
     </v-layout>
+    <v-layout row>
+      <v-flex xs6>
+        <div align="center">图片1</div>
+        <v-upload
+          v-model="apartment.imageA"
+          url="/upload/image"
+          :multiple="false"
+          :pic-width="250"
+          :pic-height="90"
+        />
+      </v-flex>
+      <v-flex xs6>
+        <div align="center">图片2</div>
+        <v-upload
+          v-model="apartment.imageB"
+          url="/upload/image"
+          :multiple="false"
+          :pic-width="250"
+          :pic-height="90"
+        />
+      </v-flex>
+    </v-layout>
 
     <v-layout class="my-4">
       <v-btn @click="submit" color="primary">提交</v-btn>
