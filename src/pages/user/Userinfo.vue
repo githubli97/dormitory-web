@@ -6,8 +6,8 @@
       :nudge-width="200"
       offset-x
     >
-      <template v-slot:activator="{ on }">
-        <v-toolbar flat class="transparent" v-on="on">
+      <template slot="activator">
+        <v-toolbar flat class="transparent">
           <v-list class="pa-0">
             <v-list-tile avatar>
               <v-list-tile-avatar>

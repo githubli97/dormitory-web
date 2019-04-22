@@ -18,7 +18,6 @@ export default new Router({
   routes: [
     route("/login", '/Login', "Login"),
     route("/register", '/Register', "Register"),
-    route("/register-success", '/RegisterSuccess', "RegisterSuccess"),
     {
       path: "/",
       component: () => import('../pages/Layout'),
