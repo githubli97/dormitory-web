@@ -18,7 +18,7 @@ export default new Router({
   routes: [
     route("/login", '/Login', "Login"),
     route("/register", '/Register', "Register"),
-    route("/loginStudent", '/LoginStudent', "LoginStudent"),
+    route("/layoutStudent", '/LogoutStudent', "LogoutStudent"),
     {
       path: "/",
       component: () => import('../pages/Layout'),

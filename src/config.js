@@ -1,6 +1,6 @@
 const baseUrl = 'http://localhost:80'
 const config = {
-  locale: 'zh-CN', // en-US, zh-CN
+  locale: 'zh-CN', // en-US, zh-CNrun
   url: baseUrl,
   debug: {
     http: false // http request log

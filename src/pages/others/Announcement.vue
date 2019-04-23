@@ -130,11 +130,11 @@
           url: '/others/announcement',
           data: this.$qs.stringify(item)
         }).then(() => {
-          this.$message.success("公告显示！");
+          this.$message.success("修改成功！");
           // this.getDataFromApi();
         })
           .catch(() => {
-            this.$message.error("公告关闭！");
+            this.$message.error("修改失败！");
           });
       },
       editAnnouncement(item) {

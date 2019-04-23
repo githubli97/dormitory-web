@@ -22,9 +22,9 @@
         <td class="text-xs-center">{{ props.item.stock }}</td>
         <td class="text-xs-center">
           <v-switch
-            :label="`${props.item.isValid ? '启用' : '禁用'}`"
+            :label="`${props.item.state ? '启用' : '禁用'}`"
             color="success"
-            v-model="props.item.isValid"
+            v-model="props.item.state"
             @change="updateState(props.item)"
           ></v-switch>
         </td>
@@ -93,7 +93,7 @@
           {text: '所属公寓', align: 'center', value: 'apartmentId'},
           {text: '创建时间', align: 'center', value: 'sendDate'},
           {text: '库存', align: 'center', value: 'stock'},
-          {text: '是否启用', align: 'left', value: 'isValid'},
+          {text: '是否启用', align: 'left', value: 'state'},
           {text: '操作', align: 'center', value: 'id', sortable: false}
         ],
         show: false,// 是否弹出窗口
@@ -132,11 +132,11 @@
           url: '/others/stock',
           data: this.$qs.stringify(item)
         }).then(() => {
-          this.$message.success("库存显示！");
+          this.$message.success("修改成功！");
           // this.getDataFromApi();
         })
           .catch(() => {
-            this.$message.error("库存关闭！");
+            this.$message.error("修改失败！");
           });
       },
       editWaterstock(item) {
