@@ -18,6 +18,7 @@ export default new Router({
   routes: [
     route("/login", '/Login', "Login"),
     route("/register", '/Register', "Register"),
+    route("/loginStudent", '/LoginStudent', "LoginStudent"),
     {
       path: "/",
       component: () => import('../pages/Layout'),
@@ -28,7 +29,10 @@ export default new Router({
         route("/asset/room", '/asset/Room', "Room"),
 
         route("/check/sanitation", '/check/Sanitation', "Sanitation"),
-        route("/check/sleep", '/check/Sleep', "Sleep")
+        route("/check/sleep", '/check/Sleep', "Sleep"),
+
+        route("/others/notice", '/others/Announcement', "Announcement"),
+        route("/others/water", '/others/Waterstock', "Waterstock")
       ]
     }
   ]

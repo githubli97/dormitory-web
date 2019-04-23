@@ -1,61 +1,62 @@
 <template>
   <v-app>
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout align-center justify-center>
-          <v-flex xs12 sm8 md4>
-            <v-card class="elevation-12">
-              <v-toolbar dark color="primary">
-                <v-toolbar-title>学生宿舍管理</v-toolbar-title>
-                <v-spacer></v-spacer>
-              </v-toolbar>
-              <v-card-text>
-                <v-form ref="loginForm">
-                  <v-text-field
-                    prepend-icon="person"
-                    v-model="username"
-                    label="用户名"
-                    :error-messages="errorMsg4"
-                    v-on:blur="checkUsername"
-                    type="text"/>
-                  <v-text-field
-                    prepend-icon="lock"
-                    v-model="password"
-                    label="密码"
-                    id="password"
-                    :rules="[rules.passwordRequired]"
-                    :append-icon="e1 ? 'visibility' : 'visibility_off'"
-                    :append-icon-cb="() => (e1 = !e1)"
-                    :type="e1 ? 'text' : 'password'"
-                    :error-messages="errorMsg"
-                  ></v-text-field>
-                  <v-layout row>
-                    <v-flex xs8>
-                      <v-text-field
-                        prepend-icon="el-icon-edit"
-                        label="验证码"
-                        v-model="writeCode"
-                        v-on:blur="checkWriteCode"
-                        :error-messages="errorMsg2"
-                      ></v-text-field>
-                    </v-flex>
-                    <v-flex xs4>
-                      <div class="code" @click="refreshCode">
-                        <sidentify :identifyCode="identifyCode"></sidentify>
-                      </div>
-                    </v-flex>
-                  </v-layout>
+      <v-jumbotron color="primary">
+        <v-container fluid fill-height>
+          <v-layout align-center justify-center>
+            <v-flex xs12 sm8 md4>
+              <v-card class="elevation-12">
+                <v-toolbar dark color="primary">
+                  <v-toolbar-title>学生宿舍管理</v-toolbar-title>
+                  <v-spacer></v-spacer>
+                </v-toolbar>
+                <v-card-text>
+                  <v-form ref="loginForm">
+                    <v-text-field
+                      prepend-icon="person"
+                      v-model="username"
+                      label="用户名"
+                      :error-messages="errorMsg4"
+                      v-on:blur="checkUsername"
+                      type="text"/>
+                    <v-text-field
+                      prepend-icon="lock"
+                      v-model="password"
+                      label="密码"
+                      id="password"
+                      :rules="[rules.passwordRequired]"
+                      :append-icon="e1 ? 'visibility' : 'visibility_off'"
+                      :append-icon-cb="() => (e1 = !e1)"
+                      :type="e1 ? 'text' : 'password'"
+                    ></v-text-field>
+                    <v-layout row>
+                      <v-flex xs8>
+                        <v-text-field
+                          prepend-icon="el-icon-edit"
+                          label="验证码"
+                          v-model="writeCode"
+                          v-on:blur="checkWriteCode"
+                          :error-messages="errorMsg2"
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex xs4>
+                        <div class="code" @click="refreshCode">
+                          <sidentify :identifyCode="identifyCode"></sidentify>
+                        </div>
+                      </v-flex>
+                    </v-layout>
 
-                </v-form>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="primary" @click="doLogin">登录</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
+                  </v-form>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="primary" @click="doLogin">登录</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-jumbotron>
     </v-content>
     <v-dialog v-model="dialog" width="300px">
       <v-alert icon="warning" color="error" :value="true">
@@ -96,7 +97,6 @@ export default {
   methods: {
     doLogin() {
       this.checkWriteCode();
-      console.log(this.usernameError);
       if (this.$refs.loginForm.validate() && !this.usernameError) {
         this.$http({
           method: 'post',

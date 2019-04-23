@@ -75,7 +75,7 @@
 
 <script>
   import menus from "../menu";
-  import Userinfo from "./user/Userinfo"
+  import Userinfo from "./user/Teacherinfo"
 
   export default {
     data() {
@@ -118,12 +118,15 @@
           this.menuMap[p1][i.path.slice(1)] = i.title;
         })
       });
+    },
+    beforeCreate() {
       this.$http.get("/auth/verify")
         .then(resp => { // 获取响应结果对象
           this.userInfo = Object.deepCopy(resp.data);
         }).catch(() => {
         this.$router.push("/login");
       });
+
     }
   }
 </script>

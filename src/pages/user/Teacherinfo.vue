@@ -11,10 +11,10 @@
           <v-list class="pa-0">
             <v-list-tile avatar>
               <v-list-tile-avatar>
-                <img src="http://localhost:9002/1.jpg">
+                <img :src="userInfo.image">
               </v-list-tile-avatar>
               <v-list-tile-content>
-                <v-list-tile-title>{{ username }}</v-list-tile-title>
+                <v-list-tile-title>{{ userInfo.teacherName }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
           </v-list>
@@ -24,14 +24,24 @@
       <v-card>
         <v-list>
           <v-list-tile avatar>
-            <v-list-tile-avatar>
-              <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John">
-            </v-list-tile-avatar>
+            <v-flex xs4>
+              <v-list-tile-avatar>
+                <v-upload
+                  v-model="userInfo.image"
+                  url="/upload/image"
+                  :multiple="false"
+                  :pic-width="50"
+                  :pic-height="50"
+                />
+              </v-list-tile-avatar>
+            </v-flex>
+            <v-flex xs8>
 
-            <v-list-tile-content>
-              <v-list-tile-title>{{ userInfo.teacherName }}</v-list-tile-title>
-              <v-list-tile-sub-title>个人信息页</v-list-tile-sub-title>
-            </v-list-tile-content>
+              <v-list-tile-content>
+                <v-list-tile-title>用户名:{{ username }}</v-list-tile-title>
+                <v-list-tile-sub-title>个人信息页</v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-flex>
 
           </v-list-tile>
         </v-list>

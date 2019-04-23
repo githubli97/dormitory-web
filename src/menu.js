@@ -38,7 +38,7 @@ var menus = [
   {
     action: "more_horiz",
     title: "更多",
-    path:"/other",
+    path: "/others",
     items: [
       { action: "equalizer", title: "饮水预定", path: "/water" },
       { action: "equalizer", title: "公告管理", path: "/notice" }

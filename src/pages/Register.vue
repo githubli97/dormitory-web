@@ -6,7 +6,7 @@
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="primary">
-                <v-toolbar-title>用户注册</v-toolbar-title>
+                <v-toolbar-title>学生注册</v-toolbar-title>
                 <v-spacer></v-spacer>
               </v-toolbar>
               <v-card-text>
