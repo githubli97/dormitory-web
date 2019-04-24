@@ -55,17 +55,17 @@
       <v-btn icon @click.stop="dark = !dark">
         <v-icon>invert_colors</v-icon>
       </v-btn>
-     <!-- &lt;!&ndash; 顶部导航用户菜单 &ndash;&gt;
-      <v-btn icon @click.stop="dark = !dark">
-        <v-icon>account_box</v-icon>
-      </v-btn>-->
+      <!-- &lt;!&ndash; 顶部导航用户菜单 &ndash;&gt;
+       <v-btn icon @click.stop="dark = !dark">
+         <v-icon>account_box</v-icon>
+       </v-btn>-->
     </v-toolbar>
     <v-content>
-          <v-breadcrumbs>
-            <v-icon slot="divider">chevron_right</v-icon>
-            <v-breadcrumbs-item>{{item1}}</v-breadcrumbs-item>
-            <v-breadcrumbs-item>{{item2}}</v-breadcrumbs-item>
-          </v-breadcrumbs>
+      <v-breadcrumbs>
+        <v-icon slot="divider">chevron_right</v-icon>
+        <v-breadcrumbs-item>{{item1}}</v-breadcrumbs-item>
+        <v-breadcrumbs-item>{{item2}}</v-breadcrumbs-item>
+      </v-breadcrumbs>
       <div>
         <router-view/>
       </div>
@@ -98,31 +98,34 @@
       items() {
         return menus;
       },
-      item1(){
+      item1() {
         const arr = this.$route.path.split("/");
         return this.menuMap[arr[1]].name;
       },
-      item2(){
+      item2() {
         const arr = this.$route.path.split("/");
         return this.menuMap[arr[1]][arr[2]];
       }
     },
     name: 'App',
-    watch: {
-    },
-    created(){
+    watch: {},
+    created() {
       menus.forEach(m => {
         const p1 = m.path.slice(1);
-        this.menuMap[p1] = {name:m.title};
+        this.menuMap[p1] = {name: m.title};
         m.items.forEach(i => {
           this.menuMap[p1][i.path.slice(1)] = i.title;
         })
       });
     },
-    beforeCreate() {
+    mounted() {
       this.$http.get("/auth/verify")
         .then(resp => { // 获取响应结果对象
-          this.userInfo = Object.deepCopy(resp.data);
+          if (resp.data.teacher) {
+            this.userInfo = Object.deepCopy(resp.data);
+          } else {
+            this.$router.push("/layoutStudent");
+          }
         }).catch(() => {
         this.$router.push("/login");
       });

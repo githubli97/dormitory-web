@@ -31,17 +31,28 @@
 
   export default {
     name: "student-announcement",
+    props: {
+      userId: Object
+    },
     data() {
       return {
         title: "宿舍管理系统",
         posts: []
       }
-    }, mounted() {
-      this.$http.get("/others/announcement/page")
-        .then(resp => { // 获取响应结果对象
-          console.log(resp.data);
-          this.posts = resp.data.items; // 公告数据
-        });
+    },
+    created() {
+    },
+    watch: {
+      userId(value) {
+        if (value.userId != null && value.userId != "") {
+
+          this.$http.get("/others/announcement/announcementList/" + value.userId)
+            .then(resp => { // 获取响应结果对象
+              this.posts = Object.deepCopy(resp.data); // 公告数据
+            });
+        }
+      },
+      immediate: true
     }
 
   }

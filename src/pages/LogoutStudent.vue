@@ -28,8 +28,8 @@
               <!--</div>-->
             </div>
           </v-flex>
-          <student-announcement v-if="announcementShow"></student-announcement>
-          <student-stock v-if="stockShow"></student-stock>
+          <student-announcement :userId="{userId: userInfo.id}" v-show="announcementShow"></student-announcement>
+          <student-stock :userId="userInfo.id" v-show="stockShow"></student-stock>
         </v-layout>
       </v-container>
     </v-content>
@@ -58,13 +58,30 @@
     data() {
       return {
         announcementShow: true,
-        stockShow: false
+        stockShow: false,
+        userInfo: {
+          id: "",
+          username: ""
+        }
       }
     },
     components: {
       Userinfo,
       StudentAnnouncement,
       StudentStock
+    },
+    mounted() {
+      this.$http.get("/auth/verify")
+        .then(resp => { // 获取响应结果对象
+          if (resp.data.teacher) {
+            this.$router.push("/");
+          } else {
+            this.userInfo = Object.deepCopy(resp.data);
+          }
+        }).catch(() => {
+        this.$router.push("/login");
+      });
+
     }
   };
 </script>
