@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-content>
-      <v-jumbotron color="primary">
         <v-container fluid fill-height>
           <v-layout align-center justify-center>
             <v-flex xs12 sm8 md4>
@@ -50,13 +49,13 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
+                  <v-btn color="primary" @click="regist">学生注册</v-btn>
                   <v-btn color="primary" @click="doLogin">登录</v-btn>
                 </v-card-actions>
               </v-card>
             </v-flex>
           </v-layout>
         </v-container>
-      </v-jumbotron>
     </v-content>
     <v-dialog v-model="dialog" width="300px">
       <v-alert icon="warning" color="error" :value="true">
@@ -76,7 +75,7 @@ export default {
 
     dialog: false,
     e1: false,
-    identifyCodes: "123456789qwqertyuipasdfghjjklzxcvbnmQWERTYUIPASDFGHJKLZXCVBNM",
+    identifyCodes: "1234578qwqertyuipasfghjjklzxcvnmQWERTYUIPASDFGHJKLZXCVBNM",
     identifyCode: "",
     writeCode: "",
     errorMsg2: [],
@@ -96,8 +95,8 @@ export default {
   },
   methods: {
     doLogin() {
-      this.checkWriteCode();
-      if (this.$refs.loginForm.validate() && !this.usernameError) {
+      this.refreshCode();
+      if (this.$refs.loginForm.validate() && !this.usernameError && !this.writeCodeError) {
         this.$http({
           method: 'post',
           url: '/auth/accredit',
@@ -109,6 +108,10 @@ export default {
           this.$router.push("/index/dashboard");
         })
       }
+      this.checkWriteCode();
+    },
+    regist() {
+      this.$router.push("/register");
     },
     checkUsername() {
       if (this.username == null) {

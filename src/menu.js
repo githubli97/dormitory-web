@@ -20,19 +20,18 @@ var menus = [
     title: "检查管理",
     path:"/check",
     items: [
-      { action: "equalizer", title: "卫生管理", path: "/sanitation" },
-      { action: "equalizer", title: "住宿管理", path: "/sleep" },
+      {action: "delete_sweep", title: "卫生管理", path: "/sanitation"},
+      {action: "hotel", title: "住宿管理", path: "/sleep"},
       { action: "equalizer", title: "检查统计", path: "/check_statistics" }
     ]
   },
   {
-    action: "settings",
-    title: "权限管理",
-    path:"/authority",
+    action: "group",
+    title: "人员管理",
+    path: "/user",
     items: [
-      { action: "equalizer", title: "权限管理", path: "/list" },
-      { action: "equalizer", title: "角色管理", path: "/role" },
-      { action: "equalizer", title: "人员管理", path: "/member" }
+      {action: "school", title: "教职工管理", path: "/teacher"},
+      {action: "face", title: "学生管理", path: "/student"},
     ]
   },
   {
@@ -40,8 +39,8 @@ var menus = [
     title: "更多",
     path: "/others",
     items: [
-      { action: "equalizer", title: "饮水预定", path: "/water" },
-      { action: "equalizer", title: "公告管理", path: "/notice" }
+      {action: "mouse", title: "饮水预定", path: "/water"},
+      {action: "chat_bubble", title: "公告管理", path: "/notice"}
     ]
   }
 ]

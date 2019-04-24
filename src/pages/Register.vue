@@ -82,6 +82,7 @@
               </v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
+                <v-btn color="primary" @click="doLogin">返回登录</v-btn>
                 <v-btn color="primary" @click="regist">注册</v-btn>
               </v-card-actions>
             </v-card>
@@ -105,7 +106,7 @@
       checkPassword: "",
       dialog: false,
       e1: false,
-      identifyCodes: "123456789qwqertyuipasdfghjjklzxcvbnmQWERTYUIPASDFGHJKLZXCVBNM",
+      identifyCodes: "1234578qwqertyuipasfghjjklzxcvnmQWERTYUIPASDFGHJKLZXCVBNM",
       identifyCode: "",
       writeCode: "",
       errorMsg: [],
@@ -130,17 +131,7 @@
     },
     methods: {
       doLogin() {
-        // 通过axios获取数据
-        this.$http.post("/auth/accredit",
-          this.$qs.stringify({
-            username: this.username,
-            password: this.password
-          })
-        ).then(resp => { // 获取响应结果对象
-          this.$router.push("/index/dashboard");
-        }).catch(resp => {
-          this.checkUserFlag = true;
-        });
+        this.$router.push("/login");
       },
       //随机数
       randomNum(min, max) {

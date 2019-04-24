@@ -32,7 +32,10 @@ export default new Router({
         route("/check/sleep", '/check/Sleep', "Sleep"),
 
         route("/others/notice", '/others/Announcement', "Announcement"),
-        route("/others/water", '/others/Waterstock', "Waterstock")
+        route("/others/water", '/others/Waterstock', "Waterstock"),
+
+        route("/user/teacher", '/user/Teacher', "Teacher"),
+        route("/user/student", '/user/Student', "Student")
       ]
     }
   ]

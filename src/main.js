@@ -11,12 +11,10 @@ import 'vuetify/dist/vuetify.min.css'
 import qs from 'qs'
 import 'element-ui/lib/theme-chalk/index.css';
 import './assets/material.css'
-import ElementUI from 'element-ui';
 
 Vue.use(Vuetify, { theme: config.theme})
 Vue.use(MyComponent)
 Vue.prototype.$qs = qs;
-Vue.use(ElementUI);
 
 Vue.config.productionTip = false
 
