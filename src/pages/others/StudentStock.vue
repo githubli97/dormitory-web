@@ -19,15 +19,13 @@
           {{ post.content }}
         </v-card-text>
         <v-card-actions>
-          <v-btn icon class="red--text">
-            <v-icon>fa-reddit</v-icon>
-          </v-btn>
-          <v-btn icon class="light-blue--text">
-            <v-icon>fa-twitter</v-icon>
-          </v-btn>
-          <v-btn icon class="blue--text text--darken-4">
-            <v-icon>fa-facebook</v-icon>
-          </v-btn>
+          <v-container fill-height fluid>
+            <v-layout>
+              <v-flex xs12 align-end d-flex>
+                <span class="headline">库存:{{ post.title }}</span>
+              </v-flex>
+            </v-layout>
+          </v-container>
           <v-spacer></v-spacer>
           <v-btn flat class="blue--text">查看详情2</v-btn>
         </v-card-actions>

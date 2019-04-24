@@ -6,7 +6,10 @@
       :nudge-width="600"
       offset-x
     >
-      <v-btn slot="activator" round color="primary" dark>个人信息</v-btn>
+      <div slot="activator">
+        <img :src="userInfo.image">
+        <div class="headline">{{userInfo.studentName}} <span style="font-weight:bold">同学</span></div>
+      </div>
 
       <v-card>
         <v-list>
@@ -25,7 +28,7 @@
             <v-flex xs8>
 
               <v-list-tile-content>
-                <v-list-tile-title>{{ userInfo.teacherName }}</v-list-tile-title>
+                <v-list-tile-title>{{ userInfo.studentName }}</v-list-tile-title>
                 <v-list-tile-sub-title>个人信息页</v-list-tile-sub-title>
               </v-list-tile-content>
             </v-flex>
@@ -36,22 +39,19 @@
         <v-divider></v-divider>
 
         <v-layout row>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-subheader>姓名：</v-subheader>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-text-field
               label="姓名"
-              v-model="userInfo.teacherName"
+              v-model="userInfo.studentName"
             ></v-text-field>
           </v-flex>
-        </v-layout>
-
-        <v-layout row>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-subheader>性别：</v-subheader>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-text-field
               label="性别"
               v-model="userInfo.sex"
@@ -60,25 +60,84 @@
         </v-layout>
 
         <v-layout row>
-          <v-flex xs6>
-            <v-subheader>管理公寓号：</v-subheader>
+          <v-flex xs3>
+            <v-subheader>公寓名：</v-subheader>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-text-field
-              label="管理公寓号"
+              label="公寓名"
               v-model="userInfo.apartmentId"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs3>
+            <v-subheader>房间名：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="房间名"
+              v-model="userInfo.roomId"
             ></v-text-field>
           </v-flex>
         </v-layout>
 
         <v-layout row>
-          <v-flex xs6>
-            <v-subheader>教师工号：</v-subheader>
+          <v-flex xs3>
+            <v-subheader>学号：</v-subheader>
           </v-flex>
-          <v-flex xs6>
+          <v-flex xs3>
             <v-text-field
-              label="教师工号"
-              v-model="userInfo.teacherNo"
+              label="学号"
+              v-model="userInfo.studentNo"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs3>
+            <v-subheader>学院：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="学院"
+              v-model="userInfo.college"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+
+        <v-layout row>
+          <v-flex xs3>
+            <v-subheader>专业：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="专业"
+              v-model="userInfo.major"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs3>
+            <v-subheader>班级：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="班级"
+              v-model="userInfo.grade"
+            ></v-text-field>
+          </v-flex>
+        </v-layout>
+        <v-layout row>
+          <v-flex xs3>
+            <v-subheader>电话：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="电话"
+              v-model="userInfo.phone"
+            ></v-text-field>
+          </v-flex>
+          <v-flex xs3>
+            <v-subheader>邮箱：</v-subheader>
+          </v-flex>
+          <v-flex xs3>
+            <v-text-field
+              label="邮箱"
+              v-model="userInfo.email"
             ></v-text-field>
           </v-flex>
         </v-layout>
@@ -88,7 +147,7 @@
 
           <!--取消保存-->
           <v-btn flat @click="logout()">注销</v-btn>
-          <v-btn color="primary" flat @click="saveTeacher()">保存</v-btn>
+          <v-btn color="primary" flat @click="saveStudent()">保存</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -108,11 +167,19 @@
       username: "",
       userInfo: {
         id: "",
-        teacherName: "",
+        studentName: "",
         sex: "",
+        roomId: "",
         apartmentId: "",
-        teacherNo: "",
+        studentNo: "",
+
+        college: "",
+        major: "",
+        grade: "",
+        phone: "",
+        email: "",
         image: ""
+
       }
     }),
     watch: {
@@ -123,7 +190,7 @@
             this.userInfo.id = newV.id;
             if (this.userInfo.id != "" && this.userInfo.id != null) {
               // 通过axios获取数据
-              this.$http.get("/user/teacher/" + this.userInfo.id)
+              this.$http.get("/user/student/" + this.userInfo.id)
                 .then(resp => { // 获取响应结果对象
                   this.userInfo = Object.deepCopy(resp.data);
                 })
@@ -131,11 +198,19 @@
           } else {
             this.userInfo = {
               id: "",
-              teacherName: "",
+              studentName: "",
               sex: "",
+              roomId: "",
               apartmentId: "",
-              teacherNo: "",
+              studentNo: "",
+
+              college: "",
+              major: "",
+              grade: "",
+              phone: "",
+              email: "",
               image: ""
+
             };
           }
         },
@@ -147,14 +222,13 @@
         this.menu = false;
         this.$http.get("/auth/logout")
           .then(resp => {
-            // this.$router.push("/login");
-            this.$router.go(0);
+            this.$router.push("/login");
           });
       },
-      saveTeacher() {
+      saveStudent() {
         this.$http({
           method: 'put',
-          url: '/user/teacher',
+          url: '/user/student',
           data: this.$qs.stringify(this.userInfo)
         }).then(() => {
           this.$message.success("保存成功！");

@@ -5,22 +5,13 @@
         <v-layout row wrap align-center>
           <v-flex xs12 md4>
             <div class="text-xs-center">
-              <v-avatar size="125px">
-                <!--用户头像-->
-                <v-upload
-                  url="/upload/image"
-                  :multiple="false"
-                  :pic-width="50"
-                  :pic-height="50"
-                />
-              </v-avatar>
-              <div class="headline">姓名 <span style="font-weight:bold">同学</span></div>
+
+              <userinfo></userinfo>
               <div class="subheading text-xs-center grey--text pt-1 pb-3">
                 <v-layout justify-space-between>
                   <!--两个按钮-->
                   <v-btn round color="primary" dark @click="stockShow = false; announcementShow = true;">公告</v-btn>
                   <v-btn round color="primary" dark @click="stockShow = true; announcementShow = false;">饮水</v-btn>
-                  <userinfo></userinfo>
                 </v-layout>
               </div>
               <!--<div class="text-xs-center">-->
@@ -70,7 +61,7 @@
       StudentAnnouncement,
       StudentStock
     },
-    mounted() {
+    beforeCreate() {
       this.$http.get("/auth/verify")
         .then(resp => { // 获取响应结果对象
           if (resp.data.teacher) {

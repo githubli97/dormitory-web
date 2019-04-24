@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     doLogin() {
-      this.refreshCode();
+      this.checkWriteCode();
       if (this.$refs.loginForm.validate() && !this.usernameError && !this.writeCodeError) {
         this.$http({
           method: 'post',
@@ -105,10 +105,19 @@ export default {
             password: this.password
           })
         }).then(() => {
-          this.$router.push("/index/dashboard");
+          this.$http.get("/auth/verify")
+            .then(resp => { // 获取响应结果对象
+              if (resp.data.teacher) {
+                this.$router.push("/");
+              } else {
+                this.$router.push("/layoutStudent");
+              }
+            }).catch(() => {
+            this.$router.push("/login");
+          });
         })
       }
-      this.checkWriteCode();
+      this.refreshCode();
     },
     regist() {
       this.$router.push("/register");
