@@ -19,7 +19,8 @@
         <td class="text-xs-center">{{ props.item.studentNo }}</td>
         <td class="text-xs-center">{{ props.item.studentName }}</td>
         <td class="text-xs-center">{{ props.item.sex }}</td>
-        <td class="text-xs-center">{{ props.item.apartmentId }}</td>
+        <td class="text-xs-center">{{ props.item.phone }}</td>
+        <td class="text-xs-center">{{ props.item.email }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editStudent(props.item)">
             <i class="el-icon-edit"/>
@@ -44,7 +45,7 @@
       </template>
     </v-data-table>
 
-    <v-dialog v-model="show" max-width="600" scrollable v-if="show" persistent>
+    <v-dialog v-model="show" max-width="800" scrollable v-if="show" persistent>
       <v-card>
         <v-toolbar dark dense color="primary">
           <v-toolbar-title>{{isEdit ? '修改学生信息' : '新增学生信息'}}</v-toolbar-title>
@@ -81,10 +82,11 @@
         rowsPerPageItems: [5, 10, 30],
         rowsPerPageText: '每页行数:',
         headers: [// 表头
-          {text: '教职工编号', align: 'center', value: 'studentNo'},
+          {text: '学号', align: 'center', value: 'studentNo'},
           {text: '姓名', align: 'center', value: 'studentName'},
           {text: '性别', align: 'center', value: 'sex'},
-          {text: '管理公寓', align: 'center', value: 'apartmentId'},
+          {text: '联系电话', align: 'center', value: 'phone'},
+          {text: '邮箱', align: 'center', value: 'email'},
           {text: '操作', align: 'center', value: 'id', sortable: false}
         ],
         show: false,// 是否弹出窗口

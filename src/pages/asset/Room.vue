@@ -24,7 +24,6 @@
       class="elevation-1"
     >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-center">{{ props.item.apartmentId }}</td>
         <td class="text-xs-center">{{ props.item.roomNum }}</td>
         <td class="text-xs-center">{{ props.item.studentCount }}</td>
         <td class="text-xs-center">{{ props.item.roomArea }}</td>
@@ -89,7 +88,6 @@
         rowsPerPageItems: [5, 10, 30],
         rowsPerPageText: '每页行数:',
         headers: [// 表头
-          {text: '所属公寓', align: 'center', value: 'apartmentId'},
           {text: '房间号', align: 'center', value: 'roomNum'},
           {text: '入住学生数', align: 'center', value: 'studentCount'},
           {text: '房间面积', align: 'center', value: 'roomArea'},

@@ -25,6 +25,13 @@
                     :rules="[rules.phone]"
                     type="text"/>
                   <v-text-field
+                    prepend-icon="phone"
+                    v-model="studentNo"
+                    label="学号"
+                    :error-messages="errorMsg5"
+                    @change="checkStudentNo"
+                    type="text"/>
+                  <v-text-field
                     prepend-icon="lock"
                     v-model="password"
                     label="密码"
@@ -98,10 +105,12 @@
 
   export default {
     data: () => ({
+      id: "",
       username: "",
       password: "",
       phone: "",
       phoneCode: "",
+      studentNo: "",
 
       checkPassword: "",
       dialog: false,
@@ -113,6 +122,7 @@
       errorMsg2: [],
       errorMsg3: [],
       errorMsg4: [],
+      errorMsg5: [],
       rules: {
         passwordRequired: v => !!v || '密码不能为空',
         passwordLength: v => (v.length >= 4 && v.length <= 16) || '密码要在4~16位',
@@ -124,6 +134,7 @@
       checkPasswordError: true,
       writeCodeError: true,
       usernameError: true,
+      studentNoError: true,
       phoneCodeError: true
     }),
     components: {
@@ -175,12 +186,15 @@
       },
       checkUsername() {
 
-        if (this.username == null) {
+        if (this.username == null || this.username == "") {
           this.errorMsg4 = ['用户名不能为空'];
           this.usernameError = true;
+          return true;
         } else if (this.username.length < 4 && this.username > 16) {
           this.errorMsg4 = ['用户名要在4~16位'];
           this.usernameError = true;
+          return true;
+
         } else {
           this.$http({
             method: 'get', // 动态判断是POST还是PUT
@@ -191,6 +205,8 @@
           }).catch(() => {
             this.errorMsg4 = ['用户名重复'];
             this.usernameError = true;
+            return true;
+
           });
         }
 
@@ -200,9 +216,12 @@
         if (this.writeCode == null || this.writeCode == "") {
           this.errorMsg2 = ['验证码不能为空'];
           this.writeCodeError = true;
+          return true;
         } else if (this.identifyCode.toUpperCase() != this.writeCode.toUpperCase()) {
           this.errorMsg2 = ['验证码错误'];
           this.writeCodeError = true;
+          return true;
+
         } else {
           this.errorMsg2 = [];
           this.writeCodeError = false;
@@ -211,6 +230,7 @@
       },
       regist() {
         let user = {
+          id: this.id,
           username: this.username,
           password: this.password,
           phone: this.phone,
@@ -239,7 +259,38 @@
             this.refreshCode();
           });
         }
+      },
+      checkStudentNo() {
+        if (this.studentNo == null || this.studentNo == "") {
+          this.errorMsg5 = ['绑定学号不能为空'];
+          this.studentNoError = true;
+          return true;
+        } else {
+          this.$http({
+            method: 'get',
+            url: '/user/student/getIdByStudentNo/' + this.studentNo
+          }).then(resp => {
+            this.id = resp.data;
+            this.$http({
+              method: 'get', // 动态判断是POST还是PUT
+              url: '/user/check/' + this.id + '/3'
+            }).then(() => {
+              this.errorMsg5 = [];
+              this.usernameError = false;
+            }).catch(() => {
+              this.errorMsg5 = ['该学号已经被注册'];
+              this.usernameError = true;
+              return true;
+
+            });
+          }).catch(() => {
+            this.errorMsg5 = ['请重新检查学号'];
+            this.studentNoError = true;
+            return true;
+          });
+        }
+        return true;
       }
-      }
+    }
   };
 </script>

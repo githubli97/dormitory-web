@@ -6,7 +6,7 @@
           <v-flex xs12 md4>
             <div class="text-xs-center">
 
-              <userinfo></userinfo>
+              <userinfo :userinfo="userInfo"></userinfo>
               <div class="subheading text-xs-center grey--text pt-1 pb-3">
                 <v-layout justify-space-between>
                   <!--两个按钮-->
@@ -20,7 +20,7 @@
             </div>
           </v-flex>
           <student-announcement :userId="{userId: userInfo.id}" v-show="announcementShow"></student-announcement>
-          <student-stock :userId="userInfo.id" v-show="stockShow"></student-stock>
+          <student-stock :userId="{userId: userInfo.id}" v-show="stockShow"></student-stock>
         </v-layout>
       </v-container>
     </v-content>

@@ -2,12 +2,14 @@
   <v-form v-model="valid" ref="sanitationForm">
     <v-layout row wrap>
       <v-flex xs12 sm6>
-        <v-text-field
-          label="检查公寓"
+        <v-select
+          :items="apartments.states"
           v-model="sanitation.checkApartment"
-          :rules="[v => !!v || '检查公寓不能为空']"
-          :counter="10"
-        />
+          item-text="apartmentName"
+          item-value="id"
+          label="管理公寓"
+          autocomplete
+        ></v-select>
       </v-flex>
       <v-flex xs12 sm6>
         <v-text-field
@@ -28,11 +30,13 @@
       </v-flex>
 
       <v-flex xs12 sm6>
-        <v-text-field
-          label="检查日期"
+        <el-date-picker
           v-model="sanitation.checkDate"
-          required
-        />
+          type="datetime"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          placeholder="检查日期">
+        </el-date-picker>
       </v-flex>
 
       <v-flex xs12 sm6>
@@ -62,6 +66,8 @@
 
 <script>
   import config from '@/config';
+  import {DatePicker} from 'element-ui';
+
 
   export default {
     name: "sanitation-form",
@@ -78,6 +84,9 @@
         default: true
       }
     },
+    components: {
+      elDatePicker: DatePicker
+    },
     data() {
       return {
         baseUrl: config.api,
@@ -90,8 +99,19 @@
           checkDate: "",
           sortNum: "",
           remarks: ""
+        },
+        apartments: {
+          states: []
         }
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     watch: {
       oldSanitation:{ //深度监听，可监听到对象、数组的变化

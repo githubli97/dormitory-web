@@ -10,11 +10,14 @@
         />
       </v-flex>
       <v-flex xs12 sm6>
-        <v-text-field
-          label="所属公寓"
+        <v-select
+          :items="apartments.states"
           v-model="announcement.adviceArea"
-          :rules="[v => !!v || '所属公寓不能为空']"
-          required></v-text-field>
+          item-text="apartmentName"
+          item-value="id"
+          label="所属公寓"
+          autocomplete
+        ></v-select>
       </v-flex>
 
       <v-flex xs12 sm6>
@@ -72,6 +75,8 @@
 
 <script>
   import config from '@/config';
+  import {DatePicker} from 'element-ui';
+
 
   export default {
     name: "announcement-form",
@@ -88,6 +93,9 @@
         default: true
       }
     },
+    components: {
+      elDatePicker: DatePicker
+    },
     data() {
       return {
         baseUrl: config.api,
@@ -101,8 +109,19 @@
           image: "",
           sortNum: "",
           state: ""
-        }
+        },
+        apartments: {
+          states: []
+        },
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     watch: {
       oldAnnouncement: { //深度监听，可监听到对象、数组的变化

@@ -10,11 +10,14 @@
         />
       </v-flex>
       <v-flex xs12 sm6>
-        <v-text-field
-          label="公寓管理员"
-          v-model="apartment.apartmentManager"
-          :rules="[v => !!v || '公寓管理员不能为空']"
-          required></v-text-field>
+        <v-select
+          :items="teachers.states"
+          v-model="apartmentManager"
+          item-text="teacherName"
+          item-value="id"
+          label="Select"
+          autocomplete
+        ></v-select>
       </v-flex>
 
       <v-flex xs12 sm6>
@@ -128,6 +131,7 @@
         default: true
       }
     },
+    components: {},
     data() {
       return {
         baseUrl: config.api,
@@ -145,6 +149,10 @@
           imageB: "",
           repairCount: "",
           sortNum: ""
+        },
+        teachers: {
+          states: [],
+
         }
       }
     },

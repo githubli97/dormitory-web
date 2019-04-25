@@ -1,36 +1,108 @@
 <template>
   <v-form v-model="valid" ref="studentForm">
-    <v-layout row wrap>
-      <v-flex xs12 sm6>
-        <v-text-field
-          label="学生工号"
-          v-model="student.studentNo"
-          :rules="[v => !!v || '学生姓名不能为空']"
-          :counter="10"
-        />
+    <v-layout row>
+      <v-flex xs3>
+        <v-subheader>姓名：</v-subheader>
       </v-flex>
-      <v-flex xs12 sm6>
+      <v-flex xs3>
         <v-text-field
-          label="学生姓名"
+          label="姓名"
           v-model="student.studentName"
-          :rules="[v => !!v || '学生姓名不能为空']"
-          :counter="10"
-        />
+        ></v-text-field>
       </v-flex>
-      <v-flex xs12 sm6>
-        <v-text-field
-          label="性别"
-          v-model="student.sex"
-          :rules="[v => !!v || '性别不能为空']"
-          required></v-text-field>
+      <v-flex xs3>
+        <v-subheader>性别：</v-subheader>
       </v-flex>
+      <v-flex xs3>
+        <el-radio v-model="student.sex" label="1" border> 男</el-radio>
+        <el-radio v-model="student.sex" label="2" border> 女</el-radio>
+      </v-flex>
+    </v-layout>
 
-      <v-flex xs12 sm6>
-        <v-text-field
-          label="管理公寓"
+    <v-layout row>
+      <v-flex xs3>
+        <v-subheader>公寓名：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-select
+          :items="apartments.states"
           v-model="student.apartmentId"
-          required
-        />
+          item-text="apartmentName"
+          item-value="id"
+          label="所属公寓"
+          autocomplete
+        ></v-select>
+      </v-flex>
+      <v-flex xs3>
+        <v-subheader>房间名：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="房间名"
+          v-model="student.roomId"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row>
+      <v-flex xs3>
+        <v-subheader>学号：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="学号"
+          v-model="student.studentNo"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs3>
+        <v-subheader>学院：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="学院"
+          v-model="student.college"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+
+    <v-layout row>
+      <v-flex xs3>
+        <v-subheader>专业：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="专业"
+          v-model="student.major"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs3>
+        <v-subheader>班级：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="班级"
+          v-model="student.grade"
+        ></v-text-field>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs3>
+        <v-subheader>电话：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="电话"
+          v-model="student.phone"
+        ></v-text-field>
+      </v-flex>
+      <v-flex xs3>
+        <v-subheader>邮箱：</v-subheader>
+      </v-flex>
+      <v-flex xs3>
+        <v-text-field
+          label="邮箱"
+          v-model="student.email"
+        ></v-text-field>
       </v-flex>
     </v-layout>
     <v-layout class="my-4">
@@ -42,6 +114,7 @@
 
 <script>
   import config from '@/config';
+  import {Radio} from 'element-ui'
 
   export default {
     name: "student-form",
@@ -58,6 +131,9 @@
         default: true
       }
     },
+    components: {
+      elRadio: Radio
+    },
     data() {
       return {
         baseUrl: config.api,
@@ -68,6 +144,15 @@
           sex: "",
           apartmentId: "",
           studentNo: "",
+
+          college: "",
+          major: "",
+          grade: "",
+          phone: ""
+
+        },
+        apartments: {
+          states: []
         }
       }
     },
@@ -76,6 +161,9 @@
         handler(newV) {
           if (newV) {
             this.student = Object.deepCopy(newV);
+            if (this.student.sex != null) {
+              this.student.sex = this.student.sex.toString();
+            }
           } else {
             this.student = {
               id: "",
@@ -83,11 +171,25 @@
               sex: "",
               apartmentId: "",
               studentNo: "",
+
+              college: "",
+              major: "",
+              grade: "",
+              phone: ""
+
             };
           }
         },
         immediate: true
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     methods: {
       submit() {

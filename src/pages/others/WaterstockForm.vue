@@ -16,6 +16,18 @@
         <el-input-number v-model="waterstock.sortNum" label="排序号"></el-input-number>
       </v-flex>
       <v-flex xs12 sm6>
+        <v-select
+          :items="apartments.states"
+          v-model="waterstock.apartmentId"
+          item-text="apartmentName"
+          item-value="id"
+          label="所属公寓"
+          autocomplete
+        ></v-select>
+      </v-flex>
+    </v-layout>
+    <v-layout row wrap>
+      <v-flex xs12 sm6>
         <div>当前状态</div>
         <v-switch
           :label="`${waterstock.isValid ? '启用' : '禁用'}`"
@@ -43,6 +55,8 @@
 
 <script>
   import config from '@/config';
+  import {InputNumber} from 'element-ui'
+
 
   export default {
     name: "waterstock-form",
@@ -59,6 +73,9 @@
         default: true
       }
     },
+    components: {
+      ElInputNumber: InputNumber
+    },
     data() {
       return {
         baseUrl: config.api,
@@ -72,6 +89,9 @@
           stock: "",
           remark: "",
           isValid: ""
+        },
+        apartments: {
+          states: []
         }
       }
     },
@@ -95,6 +115,14 @@
         },
         immediate: true
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     methods: {
       submit() {

@@ -2,12 +2,14 @@
   <v-form v-model="valid" ref="roomForm">
     <v-layout row wrap>
       <v-flex xs12 sm6>
-        <v-text-field
-          label="所属公寓"
+        <v-select
+          :items="apartments.states"
           v-model="room.apartmentId"
-          :rules="[v => !!v || '所属公寓不能为空']"
-          :counter="10"
-        />
+          item-text="apartmentName"
+          item-value="id"
+          label="所属公寓"
+          autocomplete
+        ></v-select>
       </v-flex>
       <v-flex xs12 sm6>
         <v-text-field
@@ -101,8 +103,19 @@
           belongFloor: "",
           roomArea: "",
           sortNum: ""
+        },
+        apartments: {
+          states: []
         }
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     watch: {
       oldRoom:{ //深度监听，可监听到对象、数组的变化

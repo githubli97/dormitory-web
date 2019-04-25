@@ -17,7 +17,6 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.title }}</td>
-        <td class="text-xs-center">{{ props.item.adviceArea }}</td>
         <td class="text-xs-center">{{ props.item.createTime }}</td>
         <td class="text-xs-center">
           <v-switch
@@ -89,7 +88,6 @@
         rowsPerPageText: '每页行数:',
         headers: [// 表头
           {text: '主题', align: 'center', sortable: false, value: 'title'},
-          {text: '所属公寓', align: 'center', value: 'adviceArea'},
           {text: '创建时间', align: 'center', value: 'createTime'},
           {text: '是否启用', align: 'left', value: 'state'},
           {text: '操作', align: 'center', value: 'id', sortable: false}

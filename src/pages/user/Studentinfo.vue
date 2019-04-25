@@ -7,7 +7,7 @@
       offset-x
     >
       <div slot="activator">
-        <img :src="userInfo.image">
+        <img :src="userInfo.image" width="200" height="200">
         <div class="headline">{{userInfo.studentName}} <span style="font-weight:bold">同学</span></div>
       </div>
 
@@ -44,6 +44,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="姓名"
               v-model="userInfo.studentName"
             ></v-text-field>
@@ -53,6 +54,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="性别"
               v-model="userInfo.sex"
             ></v-text-field>
@@ -65,6 +67,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="公寓名"
               v-model="userInfo.apartmentId"
             ></v-text-field>
@@ -74,6 +77,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="房间名"
               v-model="userInfo.roomId"
             ></v-text-field>
@@ -86,6 +90,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="学号"
               v-model="userInfo.studentNo"
             ></v-text-field>
@@ -95,6 +100,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="学院"
               v-model="userInfo.college"
             ></v-text-field>
@@ -107,6 +113,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="专业"
               v-model="userInfo.major"
             ></v-text-field>
@@ -116,6 +123,7 @@
           </v-flex>
           <v-flex xs3>
             <v-text-field
+              readonly
               label="班级"
               v-model="userInfo.grade"
             ></v-text-field>

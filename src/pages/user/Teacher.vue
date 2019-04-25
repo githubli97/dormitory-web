@@ -26,8 +26,7 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.teacherNo }}</td>
         <td class="text-xs-center">{{ props.item.teacherName }}</td>
-        <td class="text-xs-center">{{ props.item.sex }}</td>
-        <td class="text-xs-center">{{ props.item.apartmentId }}</td>
+        <td class="text-xs-center">{{ props.item.sex == 1 ? "男" : "女" }}</td>
         <td class="justify-center layout px-0">
           <v-btn icon @click="editTeacher(props.item)">
             <i class="el-icon-edit"/>
@@ -93,7 +92,6 @@
           {text: '教职工编号', align: 'center', value: 'teacherNo'},
           {text: '姓名', align: 'center', value: 'teacherName'},
           {text: '性别', align: 'center', value: 'sex'},
-          {text: '管理公寓', align: 'center', value: 'apartmentId'},
           {text: '操作', align: 'center', value: 'id', sortable: false}
         ],
         show: false,// 是否弹出窗口

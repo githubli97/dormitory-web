@@ -18,19 +18,19 @@
         />
       </v-flex>
       <v-flex xs12 sm6>
-        <v-text-field
-          label="性别"
-          v-model="teacher.sex"
-          :rules="[v => !!v || '性别不能为空']"
-          required></v-text-field>
+        <el-radio v-model="teacher.sex" label="1" border> 男</el-radio>
+        <el-radio v-model="teacher.sex" label="2" border> 女</el-radio>
       </v-flex>
 
       <v-flex xs12 sm6>
-        <v-text-field
-          label="管理公寓"
+        <v-select
+          :items="apartments.states"
           v-model="teacher.apartmentId"
-          required
-        />
+          item-text="apartmentName"
+          item-value="id"
+          label="管理公寓"
+          autocomplete
+        ></v-select>
       </v-flex>
     </v-layout>
     <v-layout class="my-4">
@@ -42,6 +42,9 @@
 
 <script>
   import config from '@/config';
+  import {Radio} from 'element-ui'
+
+
 
   export default {
     name: "teacher-form",
@@ -58,6 +61,9 @@
         default: true
       }
     },
+    components: {
+      elRadio: Radio
+    },
     data() {
       return {
         baseUrl: config.api,
@@ -68,14 +74,26 @@
           sex: "",
           apartmentId: "",
           teacherNo: "",
+        },
+        apartments: {
+          states: []
         }
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     watch: {
       oldTeacher: { //深度监听，可监听到对象、数组的变化
         handler(newV) {
           if (newV) {
             this.teacher = Object.deepCopy(newV);
+            this.teacher.sex = this.teacher.sex.toString();
           } else {
             this.teacher = {
               id: "",

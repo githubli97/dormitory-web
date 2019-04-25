@@ -41,24 +41,38 @@
       return {
 
         title: "宿舍管理系统",
-        posts: [
-          {
-            title: 'Fusce ullamcorper tellus',
-            content: 'Fusce ullamcorper tellus sed maximus rutrum. Donec imperdiet ultrices maximus. Donec non tellus non neque pellentesque fermentum. Aenean in pellentesque urna.',
-            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/drop.jpg'
-          },
-          {
-            title: 'Donec vitae suscipit lectus, a luctus diam.',
-            content: 'Donec vitae suscipit lectus, a luctus diam. Proin vitae felis gravida, lobortis massa sit amet, efficitur erat. Morbi vel ultrices nisi.',
-            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/docks.jpg'
-          },
-          {
-            title: 'Vestibulum condimentum quam',
-            content: 'At sagittis sapien vulputate. Vivamus laoreet lacus id magna rutrum dapibus. Donec vel pellentesque arcu. Maecenas mollis odio tempus felis elementum commodo.',
-            imgUrl: 'https://raw.githubusercontent.com/vuetifyjs/docs/dev/static/doc-images/cards/plane.jpg'
-          }
-        ]
+        posts: [],
+        countDown: ""
+
       }
+    },
+    method: {
+      resetTime(time) {
+        var timer = null;
+        var t = time;
+        var m = 0;
+        var s = 0;
+        m = Math.floor(t / 60 % 60);
+        m < 10 && (m = '0' + m);
+        s = Math.floor(t % 60);
+
+        function countDown() {
+          s--;
+          s < 10 && (s = '0' + s);
+          if (s.length >= 3) {
+            s = 59;
+            m = "0" + (Number(m) - 1);
+          }
+          if (m.length >= 3) {
+            m = '00';
+            s = '00';
+            clearInterval(timer);
+          }
+          this.countDown = m + "分钟" + s + "秒";
+        }
+
+        timer = setInterval(countDown, 1000);
+      },
     }
 
   }

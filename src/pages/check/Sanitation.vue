@@ -25,7 +25,6 @@
     >
       <template slot="items" slot-scope="props">
         <td class="text-xs-center">{{ props.item.id }}</td>
-        <td class="text-xs-center">{{ props.item.checkApartment }}</td>
         <td class="text-xs-center">{{ props.item.checkFloor }}</td>
         <td class="text-xs-center">{{ props.item.inspectorId }}</td>
         <td class="text-xs-center">{{ props.item.checkDate }}</td>
@@ -112,7 +111,6 @@
           rowsPerPageText: '每页行数:',
           headers: [// 表头
             {text: '单号', align: 'center', sortable: false, value: 'id'},
-            {text: '检查公寓', align: 'center', value: 'checkApartment'},
             {text: '检查楼层', align: 'center', value: 'checkFloor'},
             {text: '检查员', align: 'center', value: 'inspectorId'},
             {text: '检查日期', align: 'center', value: 'checkDate'},
