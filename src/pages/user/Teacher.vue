@@ -31,6 +31,9 @@
           <v-btn icon @click="editTeacher(props.item)">
             <i class="el-icon-edit"/>
           </v-btn>
+          <v-btn slot="activator" icon @click="teacherRegister(props.item)">
+            <i class="el-icon-upload2"/>
+          </v-btn>
           <v-btn icon @click="deleteTeacher(props.item)">
             <i class="el-icon-delete"/>
           </v-btn>
@@ -67,17 +70,34 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="show2" max-width="600" scrollable v-if="show2" persistent>
+      <v-card>
+        <v-toolbar dark dense color="primary">
+          <v-toolbar-title>注册教师用户</v-toolbar-title>
+          <v-spacer/>
+          <v-btn icon @click="show2 = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </v-toolbar>
+        <v-card-text class="px-5 py-2">
+          <teacher-register :oldTeacher="oldTeacher" @close="show = false"
+                            :reload="getDataFromApi"/>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 
 </template>
 
 <script>
   import TeacherForm from './TeacherForm'
+  import TeacherRegister from '../Teacherregister'
 
   export default {
     name: "teacher",
     components: {
-      TeacherForm
+      TeacherForm,
+      TeacherRegister
     },
     data() {
       return {
@@ -141,6 +161,10 @@
         this.oldTeacher = item;
         this.isEdit = true;
         this.show = true;
+      },
+      teacherRegister(item) {
+        this.oldTeacher = item;
+        this.show2 = true;
       },
       deleteTeacher(item) {
         this.$message.confirm('此操作将永久删除该教师信息, 是否继续?').then(() => {

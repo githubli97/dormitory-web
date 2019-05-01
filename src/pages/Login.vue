@@ -113,9 +113,11 @@ export default {
                 this.$router.push("/layoutStudent");
               }
             }).catch(() => {
-            // this.$router.push("/login");
           });
-        })
+        }).catch(() => {
+          this.errorMsg4 = ['用户名或密码错误'];
+          this.usernameError = true;
+        });
       }
       this.refreshCode();
     },

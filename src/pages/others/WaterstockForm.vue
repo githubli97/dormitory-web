@@ -35,6 +35,14 @@
           v-model="waterstock.isValid"
         ></v-switch>
       </v-flex>
+      <v-flex xs12 sm6>
+        <v-text-field
+          label="发布教师"
+          v-model="waterstock.teacherId"
+          :rules="[v => !!v || '发布教师不能为空']"
+          required
+        />
+      </v-flex>
     </v-layout>
     <v-layout row>
       <v-flex xs12>

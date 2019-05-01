@@ -15,7 +15,7 @@
           v-model="apartmentManager"
           item-text="teacherName"
           item-value="id"
-          label="Select"
+          label="管理教师"
           autocomplete
         ></v-select>
       </v-flex>
@@ -152,7 +152,6 @@
         },
         teachers: {
           states: [],
-
         }
       }
     },
@@ -180,6 +179,14 @@
         },
         immediate:true
       }
+    },
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/user/teacher/selectIdAndNames'
+      }).then(resp => {
+        this.teachers.states = resp.data;
+      });
     },
   methods: {
     submit() {

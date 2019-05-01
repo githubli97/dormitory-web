@@ -5,12 +5,12 @@
         <v-card-media
           class="white--text"
           height="170px"
-          :src="post.imgUrl"
+          :src="post.image"
         >
           <v-container fill-height fluid>
             <v-layout>
               <v-flex xs12 align-end d-flex>
-                <span class="headline">{{ post.title }}</span>
+                <span class="headline" color="black">发布位置：{{ post.apartmentId }}</span>
               </v-flex>
             </v-layout>
           </v-container>
@@ -22,12 +22,13 @@
           <v-container fill-height fluid>
             <v-layout>
               <v-flex xs12 align-end d-flex>
-                <span class="headline">库存:{{ post.title }}</span>
+                <span class="headline">库存:{{ post.stock }}</span>
               </v-flex>
             </v-layout>
           </v-container>
           <v-spacer></v-spacer>
-          <v-btn flat class="blue--text">查看详情2</v-btn>
+          <v-btn flat class="blue--text" v-show="post.readonly">{{post.content}}</v-btn>
+          <v-btn flat class="blue--text" v-show="!post.readonly" @click="">{{post.content}}</v-btn>
         </v-card-actions>
       </v-card>
     </div>
@@ -37,42 +38,70 @@
 
   export default {
     name: "student-stock",
+    props: {
+      userId: Object
+    },
     data() {
       return {
-
         title: "宿舍管理系统",
         posts: [],
         countDown: ""
-
       }
     },
-    method: {
-      resetTime(time) {
-        var timer = null;
-        var t = time;
-        var m = 0;
-        var s = 0;
-        m = Math.floor(t / 60 % 60);
-        m < 10 && (m = '0' + m);
-        s = Math.floor(t % 60);
+    watch: {
+      userId(value) {
+        if (value.userId != null && value.userId != "") {
 
-        function countDown() {
-          s--;
-          s < 10 && (s = '0' + s);
-          if (s.length >= 3) {
-            s = 59;
-            m = "0" + (Number(m) - 1);
-          }
-          if (m.length >= 3) {
-            m = '00';
-            s = '00';
-            clearInterval(timer);
-          }
-          this.countDown = m + "分钟" + s + "秒";
+          this.$http.get("/others/stock/stockList/" + value.userId)
+            .then(resp => { // 获取响应结果对象
+              this.posts = Object.deepCopy(resp.data); // 公告数据
+
+              const date = new Date();
+              var s1 = date.getTime();
+              for (var i = 0; i < this.posts.length; i++) {
+                var date1 = new Date(this.posts[i].sendDate);
+                var s2 = date1.getTime();
+
+                if (s1 < s2) {
+                  var total = (s2 - s1) / 1000;
+                  var min = parseInt((total % (24 * 60 * 60)) / 60);//计算整数分
+                  var afterMin = parseInt(total % 60);//取得算出分后剩余的秒数
+
+                  this.posts[i].content = min + "分" + afterMin + "秒";
+                  this.posts[i].readonly = false;
+                  console.log(this.posts[i].content);
+
+                } else {
+                  this.posts[i].content = "开始预订";
+                  this.posts[i].readonly = true;
+                }
+              }
+            });
         }
-
-        timer = setInterval(countDown, 1000);
       },
+      immediate: true
+    },
+    method: {
+      buttonTime() {
+        const date = new Date();
+        for (var i = 0; i < this.posts.length; i++) {
+          let date1 = new Date(this.posts[i].sendDate);
+          var s1 = date.getTime();
+          var s2 = date1.getTime();
+
+          if (s1 < s2) {
+            var total = (s2 - s1) / 1000;
+            var min = parseInt((total % (24 * 60 * 60)) / 60);//计算整数分
+            var afterMin = parseInt(total % 60);//取得算出分后剩余的秒数
+
+            this.posts[i].content = min + "分" + afterMin + "秒";
+            console.log(this.posts[i].content);
+
+          } else {
+            this.posts[i].content = "开始预订";
+          }
+        }
+      }
     }
 
   }
