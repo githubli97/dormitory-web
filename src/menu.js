@@ -12,7 +12,6 @@ var menus = [
     items: [
       { action: "location_city", title: "公寓管理", path: "/apartment" },
       { action: "equalizer", title: "宿舍管理", path: "/room" },
-      { action: "equalizer", title: "统计", path: "/asset_statistics" }
     ]
   },
   {
@@ -21,8 +20,7 @@ var menus = [
     path:"/check",
     items: [
       {action: "delete_sweep", title: "卫生管理", path: "/sanitation"},
-      {action: "hotel", title: "住宿管理", path: "/sleep"},
-      { action: "equalizer", title: "检查统计", path: "/check_statistics" }
+      {action: "hotel", title: "住宿管理", path: "/sleep"}
     ]
   },
   {
@@ -39,7 +37,6 @@ var menus = [
     title: "更多",
     path: "/others",
     items: [
-      {action: "mouse", title: "饮水预定", path: "/water"},
       {action: "chat_bubble", title: "公告管理", path: "/notice"}
     ]
   }

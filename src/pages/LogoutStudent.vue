@@ -9,9 +9,6 @@
               <userinfo :userinfo="userInfo"></userinfo>
               <div class="subheading text-xs-center grey--text pt-1 pb-3">
                 <v-layout justify-space-between>
-                  <!--两个按钮-->
-                  <v-btn round color="primary" dark @click="stockShow = false; announcementShow = true;">公告</v-btn>
-                  <v-btn round color="primary" dark @click="stockShow = true; announcementShow = false;">饮水</v-btn>
                 </v-layout>
               </div>
               <!--<div class="text-xs-center">-->
@@ -19,8 +16,7 @@
               <!--</div>-->
             </div>
           </v-flex>
-          <student-announcement :userId="{userId: userInfo.id}" v-show="announcementShow"></student-announcement>
-          <student-stock :userId="{userId: userInfo.id}" v-show="stockShow"></student-stock>
+          <student-announcement :userId="{userId: userInfo.id}"></student-announcement>
         </v-layout>
       </v-container>
     </v-content>
@@ -42,14 +38,11 @@
 <script>
   import Userinfo from "./user/Studentinfo"
   import StudentAnnouncement from "./others/StudentAnnouncement"
-  import StudentStock from "./others/StudentStock"
 
 
   export default {
     data() {
       return {
-        announcementShow: true,
-        stockShow: false,
         userInfo: {
           id: "",
           username: ""
@@ -58,8 +51,7 @@
     },
     components: {
       Userinfo,
-      StudentAnnouncement,
-      StudentStock
+      StudentAnnouncement
     },
     beforeCreate() {
       this.$http.get("/auth/verify")

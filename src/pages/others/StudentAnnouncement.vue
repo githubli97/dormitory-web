@@ -19,7 +19,7 @@
           {{ post.content }}
         </v-card-text>
         <v-card-actions>
-          <div>来自于{{post.adviceArea}},{{post.createTime}}</div>
+          <div>来自于：{{post.adviceArea}},{{post.createTime}}</div>
           <v-spacer></v-spacer>
           <!--<v-btn flat class="blue&#45;&#45;text"></v-btn>-->
         </v-card-actions>
@@ -37,10 +37,19 @@
     data() {
       return {
         title: "宿舍管理系统",
-        posts: []
+        posts: [],
+        apartments: {
+          states: []
+        }
       }
     },
-    created() {
+    beforeCreate() {
+      this.$http({
+        method: 'get', // 动态判断是POST还是PUT
+        url: '/asset/apartment/selectIdAndNames'
+      }).then(resp => {
+        this.apartments.states = resp.data;
+      });
     },
     watch: {
       userId(value) {
@@ -49,6 +58,14 @@
           this.$http.get("/others/announcement/announcementList/" + value.userId)
             .then(resp => { // 获取响应结果对象
               this.posts = Object.deepCopy(resp.data); // 公告数据
+
+              for (var i = 0; i < this.posts.length; i++) {
+                for (var j = 0; j < this.apartments.states.length; j++) {
+                  if (this.posts[i].adviceArea == this.apartments.states[j].id) {
+                    this.posts[i].adviceArea = this.apartments.states[j].apartmentName;
+                  }
+                }
+              }
             });
         }
       },
